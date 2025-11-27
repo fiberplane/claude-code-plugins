@@ -1,12 +1,18 @@
 {
-  "name": "linear-agent",
-  "version": "0.1.0",
-  "description": "Long-running agent workflow with Linear. Scaffolds all features upfront, then implements one per session.",
-  "author": {
-    "name": "Laurynas"
-  },
-  "keywords": ["linear", "agent", "workflow", "project-management"],
-  "commands": "./commands",
-  "hooks": "./hooks/hooks.json",
-  "mcpServers": "./.mcp.json"
+	"name": "linear-agent",
+	"version": "0.2.0",
+	"description": "Long-running agent workflow with Linear. Scaffolds all features upfront, then implements one per session.",
+	"author": {
+		"name": "Laurynas",
+		"email": "laurynas@fiberplane.com"
+	},
+	"keywords": [
+		"linear",
+		"agent",
+		"workflow",
+		"project-management"
+	],
+	"commands": "./commands",
+	"hooks": "./hooks/hooks.json",
+	"mcpServers": "./.mcp.json"
 }
