@@ -23,40 +23,36 @@ Or add to your Claude Code plugins directory.
 
 ## Usage
 
-### Starting with a Brief (No Issues Yet)
+Start the workflow with the `/agent` slash command.
 
-Provide a Linear project URL that has a description but no issues:
-
-```
-Here's the Linear project: https://linear.app/team/project/abc-123
-It just has a brief - help me break it down into features
-```
-
-The plugin will:
-1. Ask about your tech preferences (language, framework, testing, architecture)
-2. Analyze the brief and propose feature breakdown
-3. Create issues in Linear after your approval
-4. Save preferences for consistent implementation
-
-### Starting with Existing Issues
-
-If your project already has issues:
+### Starting a New Project
 
 ```
-Here's the Linear project I want to work on: https://linear.app/team/project/abc-123
+/agent
 ```
 
-The plugin will:
-1. Ask about tech preferences (if not already set)
-2. Present an architecture plan for approval
-3. Create scaffolding (tests, types, structure) for ALL features
-4. Commit the scaffold
-5. Save state to `.claude-linear-agent.json`
+If no `.claude-linear-agent.json` exists, you'll be prompted to provide a Linear project or issue URL.
+
+**With a brief (no issues yet):**
+1. Plugin asks about your tech preferences (language, framework, testing, architecture)
+2. Analyzes the brief and proposes feature breakdown
+3. Creates issues in Linear after your approval
+4. Saves preferences for consistent implementation
+
+**With existing issues:**
+1. Asks about tech preferences (if not already set)
+2. Presents an architecture plan for approval
+3. Creates scaffolding (tests, types, structure) for ALL features
+4. Commits the scaffold
+5. Saves state to `.claude-linear-agent.json`
 
 ### Continuing Work
 
-On subsequent sessions, the plugin auto-activates when `.claude-linear-agent.json` exists:
+```
+/agent
+```
 
+When `.claude-linear-agent.json` exists, the plugin:
 1. Fetches current issue status from Linear
 2. Suggests next highest-priority issue
 3. Implements the feature using your saved preferences
@@ -96,9 +92,10 @@ These preferences are stored in Linear (project description or pinned "Technical
 
 | Component | Purpose |
 |-----------|---------|
+| Command | `/agent` slash command to start/continue workflow |
 | Skill | Workflow instructions for all three phases |
 | MCP | Auto-provisions Linear MCP server connection |
-| Hook | SessionStart triggers workflow automatically |
+| Hook | SessionStart injects context when state file exists |
 
 ## Key Principles
 

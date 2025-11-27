@@ -6,6 +6,7 @@
     "name": "Laurynas"
   },
   "keywords": ["linear", "agent", "workflow", "project-management"],
+  "commands": "./commands",
   "hooks": "./hooks/hooks.json",
   "mcpServers": "./.mcp.json"
 }
