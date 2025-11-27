@@ -1,0 +1,21 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "claude-code-plugins",
+  "version": "1.0.0",
+  "description": "Custom Claude Code plugins collection",
+  "owner": {
+    "name": "Laurynas"
+  },
+  "plugins": [
+    {
+      "name": "linear-agent",
+      "description": "Long-running agent workflow with Linear. Scaffolds all features upfront, then implements one per session.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Laurynas"
+      },
+      "source": "./linear-agent",
+      "category": "productivity"
+    }
+  ]
+}
