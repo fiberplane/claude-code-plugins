@@ -3,6 +3,10 @@
 	"name": "fiberplane-claude-code-plugins",
 	"version": "1.0.0",
 	"description": "Fiberplane's Claude Code plugins collection",
+	"owner": {
+		"name": "Fiberplane",
+		"email": "support@fiberplane.com"
+	},
 	"plugins": [
 		{
 			"name": "linear-agent",
