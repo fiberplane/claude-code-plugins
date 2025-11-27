@@ -175,10 +175,11 @@ Triggered when:
    - Understand what was done in previous sessions
 
 5. **Select next issue**
-   - Pick highest-priority issue that is in "Backlog", "Todo", or "In Progress" state
-   - Skip issues in "Triage" (not ready), "Done", "Canceled"
+   - Pick highest-priority issue that is not "Done" or "Canceled"
+   - If issue is in "Triage", confirm with user: "This issue is still in Triage - should I work on it or skip for now?"
    - Present selection to user for confirmation
    - User may override selection
+   - **Update issue state to "In Progress"** before starting work
 
 6. **Implement feature**
    - Follow preferences from state file (tech stack, patterns)
@@ -187,14 +188,15 @@ Triggered when:
    - Maintain mergeable codebase at all times
    - Run tests AFTER changes
    - Tests that were stubs should now pass
+   - **Update Linear frequently** - add comments as you make progress (same frequency as updating a todo list)
 
 7. **On completion**
    - Commit with issue ID in message (e.g., "ABC-123: Implement user auth")
-   - Add progress comment to Linear issue:
+   - Add final progress comment to Linear issue:
      - What was implemented
      - Test status
      - Any blockers or notes for next session
-   - Update issue status (→ In Review, Done, etc.)
+   - Update issue status to "Done" (or "In Review" if PR needed)
 
 ---
 
