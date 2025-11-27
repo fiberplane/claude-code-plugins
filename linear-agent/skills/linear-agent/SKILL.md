@@ -12,6 +12,28 @@ Implements Anthropic's "effective harnesses for long-running agents" pattern usi
 - Linear MCP server must be configured and authenticated
 - User provides a Linear project URL or parent issue URL to begin
 
+## Parsing Linear URLs
+
+When user provides a Linear URL, extract identifiers correctly to avoid failed API calls:
+
+**Project URLs:**
+- Format: `https://linear.app/{workspace}/project/{name}-{uuid}/...`
+- Example: `https://linear.app/fiberplane/project/local-ai-gateway-f7279645c602/overview`
+- The `{name}-{uuid}` part (e.g., `local-ai-gateway-f7279645c602`) is the project **slug**
+- Use `list_projects` with `query` parameter to search by name, NOT `get_project` with the slug
+- The slug alone won't work with `get_project` - you need the full UUID
+
+**Issue URLs:**
+- Format: `https://linear.app/{workspace}/issue/{team}-{number}/...`
+- Example: `https://linear.app/fiberplane/issue/FIB-123/implement-auth`
+- Extract `{team}-{number}` (e.g., `FIB-123`) as the issue identifier
+- Use `get_issue` with this identifier directly
+
+**Efficient lookup pattern for projects:**
+1. Extract the human-readable name from URL (e.g., "local-ai-gateway" from slug)
+2. Call `list_projects(query: "local ai gateway")` to find by name
+3. Use the returned UUID for subsequent calls like `list_issues(project: uuid)`
+
 ## Workflow Overview
 
 **Three phases:**
