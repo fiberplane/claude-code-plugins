@@ -23,12 +23,12 @@ Or add to your Claude Code plugins directory.
 
 ## Usage
 
-Start the workflow with the `/agent` slash command.
+Start the workflow with the `/linear-agent` slash command.
 
 ### Starting a New Project
 
 ```
-/agent
+/linear-agent
 ```
 
 If no `.claude-linear-agent.json` exists, you'll be prompted to provide a Linear project or issue URL.
@@ -49,7 +49,7 @@ If no `.claude-linear-agent.json` exists, you'll be prompted to provide a Linear
 ### Continuing Work
 
 ```
-/agent
+/linear-agent
 ```
 
 When `.claude-linear-agent.json` exists, the plugin:
@@ -92,7 +92,7 @@ These preferences are stored in Linear (project description or pinned "Technical
 
 | Component | Purpose |
 |-----------|---------|
-| Command | `/agent` slash command to start/continue workflow |
+| Command | `/linear-agent` slash command to start/continue workflow |
 | Skill | Workflow instructions for all three phases |
 | MCP | Auto-provisions Linear MCP server connection |
 | Hook | SessionStart injects context when state file exists |
