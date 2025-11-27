@@ -4,23 +4,33 @@ A collection of plugins for [Claude Code](https://docs.anthropic.com/en/docs/cla
 
 ## Installation
 
-Add this marketplace to your Claude Code settings:
+In Claude Code, add this marketplace:
 
-```bash
-claude plugins:add-marketplace github:fiberplane/claude-code-plugins
+```
+/plugin marketplace add fiberplane/claude-code-plugins
 ```
 
-Then enable the plugin you want:
+Then install the plugin:
 
-```bash
-claude plugins:enable linear-agent
+```
+/plugin install linear-agent@fiberplane-claude-code-plugins
 ```
 
-Or add it directly to your `~/.claude/settings.json`:
+Or configure via `~/.claude/settings.json`:
 
 ```json
 {
-  "enabledPlugins": ["linear-agent@fiberplane-claude-code-plugins"]
+  "extraKnownMarketplaces": {
+    "fiberplane-claude-code-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "fiberplane/claude-code-plugins"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "linear-agent@fiberplane-claude-code-plugins": true
+  }
 }
 ```
 
