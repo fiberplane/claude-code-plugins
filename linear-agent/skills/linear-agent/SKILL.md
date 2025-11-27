@@ -77,6 +77,7 @@ Triggered when:
 
 4. **Create issues in Linear**
    - Create each approved issue in Linear
+   - **Set state to "Backlog" or "Todo"** (not Triage - issues in Triage are not ready for work)
    - Set appropriate priorities
    - Add descriptions with acceptance criteria
    - Link dependencies between issues
@@ -174,7 +175,8 @@ Triggered when:
    - Understand what was done in previous sessions
 
 5. **Select next issue**
-   - Pick highest-priority non-done issue
+   - Pick highest-priority issue that is in "Backlog", "Todo", or "In Progress" state
+   - Skip issues in "Triage" (not ready), "Done", "Canceled"
    - Present selection to user for confirmation
    - User may override selection
 
