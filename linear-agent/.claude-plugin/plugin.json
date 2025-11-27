@@ -13,6 +13,5 @@
 		"project-management"
 	],
 	"commands": "./commands",
-	"hooks": "./hooks/hooks.json",
 	"mcpServers": "./.mcp.json"
 }
