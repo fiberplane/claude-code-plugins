@@ -148,7 +148,12 @@ Triggered when:
 8. **Ask about Slack notifications**
    - Ask user: "Would you like progress updates posted to Slack? If yes, provide a Slack workflow webhook URL."
    - If user wants Slack notifications, explain setup:
-     > Create a Slack workflow with a webhook trigger. Add a custom variable named `message` (type: text). This will receive the progress updates.
+     > **Slack Workflow Setup** ([docs](https://slack.com/help/articles/360041352714-Build-a-workflow--Create-a-workflow-that-starts-outside-of-Slack)):
+     > 1. In Slack, go to **More → Automations → New Workflow → Build Workflow**
+     > 2. Name your workflow, select **"From a webhook"** as the trigger
+     > 3. Add a variable with key `message` and type `text`
+     > 4. Add a step to post the `message` variable to your channel
+     > 5. Publish the workflow and copy the webhook URL (starts with `https://hooks.slack.com/triggers/...`)
    - If provided, save `slackWebhookUrl` to `.claude-linear-agent.json`
    - Ensure `.claude-linear-agent.json` is added to `.gitignore` (create if needed)
 
