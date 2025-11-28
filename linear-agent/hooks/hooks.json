@@ -12,7 +12,7 @@
         ]
       }
     ],
-    "PreToolUse": [
+    "PostToolUse": [
       {
         "matcher": "TodoWrite",
         "hooks": [

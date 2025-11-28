@@ -14,18 +14,16 @@ if [ -f "$STATE_FILE" ]; then
     if [ "$HAS_SLACK" = "true" ]; then
       cat << EOF
 {
-  "decision": "allow",
   "hookSpecificOutput": {
-    "additionalContext": "[ACTION REQUIRED] You are updating todos - you MUST now: 1) Post comment to Linear issue $LINEAR_ID with this update. 2) Run: \${CLAUDE_PLUGIN_ROOT}/scripts/slack-update.sh \"your update message\". Do this IMMEDIATELY after TodoWrite, before continuing."
+    "additionalContext": "[ACTION REQUIRED] You just updated todos. BEFORE doing anything else: 1) Post comment to Linear issue $LINEAR_ID with this update. 2) Run: \${CLAUDE_PLUGIN_ROOT}/scripts/slack-update.sh \"your update message\""
   }
 }
 EOF
     else
       cat << EOF
 {
-  "decision": "allow",
   "hookSpecificOutput": {
-    "additionalContext": "[ACTION REQUIRED] You are updating todos - you MUST now post a comment to Linear issue $LINEAR_ID with this update. Do this IMMEDIATELY after TodoWrite completes, before continuing other work."
+    "additionalContext": "[ACTION REQUIRED] You just updated todos. BEFORE doing anything else, post a comment to Linear issue $LINEAR_ID with this update."
   }
 }
 EOF
