@@ -16,7 +16,7 @@ if [ -f "$STATE_FILE" ]; then
 {
   "decision": "allow",
   "hookSpecificOutput": {
-    "additionalContext": "[Linear + Slack Update Required] 1) Update issue status if changed. 2) Post a comment to $LINEAR_ID: what you're doing and why (2-3 sentences). 3) Post same update to Slack via curl to the webhook URL in state file."
+    "additionalContext": "[ACTION REQUIRED] You are updating todos - you MUST now: 1) Post comment to Linear issue $LINEAR_ID with this update. 2) Post same update to Slack webhook. Do this IMMEDIATELY after TodoWrite completes, before continuing other work."
   }
 }
 EOF
@@ -25,7 +25,7 @@ EOF
 {
   "decision": "allow",
   "hookSpecificOutput": {
-    "additionalContext": "[Linear Update Required] 1) Update issue status if changed (e.g. mark In Progress, Done). 2) Post a comment to $LINEAR_ID: what you're doing and why (2-3 sentences max)."
+    "additionalContext": "[ACTION REQUIRED] You are updating todos - you MUST now post a comment to Linear issue $LINEAR_ID with this update. Do this IMMEDIATELY after TodoWrite completes, before continuing other work."
   }
 }
 EOF
