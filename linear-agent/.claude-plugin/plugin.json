@@ -1,6 +1,6 @@
 {
 	"name": "linear-agent",
-	"version": "0.4.0",
+	"version": "0.5.0",
 	"description": "Long-running agent workflow with Linear. Scaffolds all features upfront, then implements one per session.",
 	"author": {
 		"name": "Laurynas",
