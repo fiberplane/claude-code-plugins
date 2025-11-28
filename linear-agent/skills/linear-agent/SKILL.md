@@ -145,7 +145,12 @@ Triggered when:
    - Create commit with descriptive message
    - Message should reference the Linear project/issue
 
-8. **Transition to coding phase**
+8. **Ask about Slack notifications**
+   - Ask user: "Would you like progress updates posted to Slack? If yes, provide a Slack incoming webhook URL."
+   - If provided, save `slackWebhookUrl` to `.claude-linear-agent.json`
+   - Ensure `.claude-linear-agent.json` is added to `.gitignore` (create if needed)
+
+9. **Transition to coding phase**
    - Update `.claude-linear-agent.json`: set `phase: "coding"`
 
 ---
@@ -189,6 +194,12 @@ Triggered when:
    - Run tests AFTER changes
    - Tests that were stubs should now pass
    - **Update Linear frequently** - add comments as you make progress (same frequency as updating a todo list)
+   - **Post to Slack** - if `slackWebhookUrl` is configured, post the same updates to Slack:
+     ```bash
+     curl -X POST -H 'Content-Type: application/json' \
+       --data '{"text":"[PROJECT] Starting auth middleware. Validating JWT tokens."}' \
+       "$SLACK_WEBHOOK_URL"
+     ```
 
 7. **On completion**
    - Commit with issue ID in message (e.g., "ABC-123: Implement user auth")
@@ -197,6 +208,7 @@ Triggered when:
      - Test status
      - Any blockers or notes for next session
    - Update issue status to "Done" (or "In Review" if PR needed)
+   - **Post completion to Slack** if configured
 
 ---
 
@@ -208,7 +220,8 @@ Triggered when:
 {
   "type": "project",
   "linearId": "ABC-123",
-  "phase": "coding"
+  "phase": "coding",
+  "slackWebhookUrl": "https://hooks.slack.com/services/..."
 }
 ```
 
@@ -218,6 +231,9 @@ Triggered when:
   - `"planning"` - Breaking down brief into issues
   - `"scaffolding"` - Creating test stubs, types, structure
   - `"coding"` - Implementing features one at a time
+- `slackWebhookUrl`: (optional) Slack incoming webhook URL for posting updates
+
+**IMPORTANT**: This file contains secrets (webhook URL). Ensure `.claude-linear-agent.json` is in `.gitignore`.
 
 **Note**: Technical preferences live in Linear (project description or pinned issue), not in this file.
 
