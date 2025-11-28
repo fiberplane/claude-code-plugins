@@ -11,11 +11,12 @@ if [ -f "$STATE_FILE" ]; then
 
   # Only remind during coding phase when actively implementing
   if [ "$PHASE" = "coding" ]; then
+    SLACK_URL=$(grep -o '"slackWebhookUrl":\s*"[^"]*"' "$STATE_FILE" | sed 's/"slackWebhookUrl":\s*"//' | sed 's/"$//')
     if [ "$HAS_SLACK" = "true" ]; then
       cat << EOF
 {
   "hookSpecificOutput": {
-    "additionalContext": "[ACTION REQUIRED] You just updated todos. BEFORE doing anything else: 1) Post comment to Linear issue $LINEAR_ID with this update. 2) Run: \${CLAUDE_PLUGIN_ROOT}/scripts/slack-update.sh \"your update message\""
+    "additionalContext": "[ACTION REQUIRED] You just updated todos. BEFORE doing anything else: 1) Post comment to Linear issue $LINEAR_ID with this update. 2) Post to Slack - webhook URL is: $SLACK_URL"
   }
 }
 EOF
