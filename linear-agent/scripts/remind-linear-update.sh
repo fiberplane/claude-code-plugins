@@ -16,7 +16,7 @@ if [ -f "$STATE_FILE" ]; then
 {
   "decision": "allow",
   "hookSpecificOutput": {
-    "additionalContext": "[ACTION REQUIRED] You are updating todos - you MUST now: 1) Post comment to Linear issue $LINEAR_ID with this update. 2) Post same update to Slack webhook. Do this IMMEDIATELY after TodoWrite completes, before continuing other work."
+    "additionalContext": "[ACTION REQUIRED] You are updating todos - you MUST now: 1) Post comment to Linear issue $LINEAR_ID with this update. 2) Run: \${CLAUDE_PLUGIN_ROOT}/scripts/slack-update.sh \"your update message\". Do this IMMEDIATELY after TodoWrite, before continuing."
   }
 }
 EOF

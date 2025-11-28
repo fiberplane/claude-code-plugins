@@ -214,12 +214,11 @@ Triggered when:
    - TodoWrite: "Auth middleware done, starting tests" → immediately post to Linear + Slack
    - TodoWrite: "Tests passing" → immediately post to Linear + Slack
 
-   Slack format (if `slackWebhookUrl` in state file):
+   Slack command (if `slackWebhookUrl` in state file):
    ```bash
-   curl -X POST -H 'Content-Type: application/json' \
-     --data '{"text":"[ISSUE-ID] Starting auth middleware. Need to validate JWT tokens."}' \
-     "$(jq -r .slackWebhookUrl .claude-linear-agent.json)"
+   ${CLAUDE_PLUGIN_ROOT}/scripts/slack-update.sh "[ISSUE-ID] Starting auth middleware. Need to validate JWT tokens."
    ```
+   The script reads the webhook URL from `.claude-linear-agent.json` automatically.
 
 7. **On completion**
    - Commit with issue ID in message (e.g., "ABC-123: Implement user auth")
