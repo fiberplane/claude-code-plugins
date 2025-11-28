@@ -197,7 +197,7 @@ Triggered when:
    - **Post to Slack** - if `slackWebhookUrl` is configured, post the same updates to Slack:
      ```bash
      curl -X POST -H 'Content-Type: application/json' \
-       --data '{"text":"[PROJECT] Starting auth middleware. Validating JWT tokens."}' \
+       --data '{"message":"[PROJECT] Starting auth middleware. Validating JWT tokens."}' \
        "$SLACK_WEBHOOK_URL"
      ```
 
