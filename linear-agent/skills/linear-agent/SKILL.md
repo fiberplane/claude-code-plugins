@@ -151,8 +151,8 @@ Triggered when:
      > **Slack Workflow Setup** ([docs](https://slack.com/help/articles/360041352714-Build-a-workflow--Create-a-workflow-that-starts-outside-of-Slack)):
      > 1. In Slack, go to **More → Automations → New Workflow → Build Workflow**
      > 2. Name your workflow, select **"From a webhook"** as the trigger
-     > 3. Add a variable with key `message` and type `text`
-     > 4. Add a step to post the `message` variable to your channel
+     > 3. Add a variable with key `text` and type `text`
+     > 4. Add a step to post the `text` variable to your channel
      > 5. Publish the workflow and copy the webhook URL (starts with `https://hooks.slack.com/triggers/...`)
    - If provided, save `slackWebhookUrl` to `.claude-linear-agent.json`
    - Ensure `.claude-linear-agent.json` is added to `.gitignore` (create if needed)
@@ -204,7 +204,7 @@ Triggered when:
    - **Post to Slack** - if `slackWebhookUrl` is configured, post the same updates to Slack:
      ```bash
      curl -X POST -H 'Content-Type: application/json' \
-       --data '{"message":"[PROJECT] Starting auth middleware. Validating JWT tokens."}' \
+       --data '{"text":"[PROJECT] Starting auth middleware. Validating JWT tokens."}' \
        "$SLACK_WEBHOOK_URL"
      ```
 
