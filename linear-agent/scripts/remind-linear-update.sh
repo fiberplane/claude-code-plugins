@@ -14,7 +14,7 @@ if [ -f "$STATE_FILE" ]; then
 {
   "decision": "allow",
   "hookSpecificOutput": {
-    "additionalContext": "[Linear Update Required] Post a comment to $LINEAR_ID: what you're about to do and why (2-3 sentences max). Use create_comment for issues or update the project. Example: 'Starting auth middleware implementation. Need to validate JWT tokens before route handlers run.'"
+    "additionalContext": "[Linear Update Required] 1) Update issue status if changed (e.g. mark In Progress, Done). 2) Post a comment to $LINEAR_ID: what you're doing and why (2-3 sentences max). Example: 'Starting auth middleware. Need to validate JWT tokens before route handlers run.'"
   }
 }
 EOF
