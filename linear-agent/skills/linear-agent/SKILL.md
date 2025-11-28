@@ -59,6 +59,9 @@ Triggered when:
    - **Code style**: Linting, formatting, conventions
    - **Deployment**: Target environment, CI/CD preferences
    - **Any constraints**: Performance requirements, compatibility needs
+   - **Slack notifications**: "Do you want progress updates posted to Slack? If yes, provide a webhook URL."
+     - If yes, save `slackWebhookUrl` to `.claude-linear-agent.json` immediately
+     - Setup instructions: Create a Slack workflow with webhook trigger, add `text` variable (type: text), webhook URL starts with `https://hooks.slack.com/triggers/...`
 
 2. **Analyze the brief**
    - Read project/issue description thoroughly
@@ -145,17 +148,10 @@ Triggered when:
    - Create commit with descriptive message
    - Message should reference the Linear project/issue
 
-8. **Ask about Slack notifications**
-   - Ask user: "Would you like progress updates posted to Slack? If yes, provide a Slack workflow webhook URL."
-   - If user wants Slack notifications, explain setup:
-     > **Slack Workflow Setup** ([docs](https://slack.com/help/articles/360041352714-Build-a-workflow--Create-a-workflow-that-starts-outside-of-Slack)):
-     > 1. In Slack, go to **More → Automations → New Workflow → Build Workflow**
-     > 2. Name your workflow, select **"From a webhook"** as the trigger
-     > 3. Add a variable with key `text` and type `text`
-     > 4. Add a step to post the `text` variable to your channel
-     > 5. Publish the workflow and copy the webhook URL (starts with `https://hooks.slack.com/triggers/...`)
-   - If provided, save `slackWebhookUrl` to `.claude-linear-agent.json`
-   - Ensure `.claude-linear-agent.json` is added to `.gitignore` (create if needed)
+8. **Verify Slack is configured** (if user wanted it in planning phase)
+   - Check `.claude-linear-agent.json` has `slackWebhookUrl`
+   - If missing but user wanted Slack, ask for the URL now
+   - Ensure `.claude-linear-agent.json` is in `.gitignore`
 
 9. **Transition to coding phase**
    - Update `.claude-linear-agent.json`: set `phase: "coding"`
