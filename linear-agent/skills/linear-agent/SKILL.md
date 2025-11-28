@@ -146,7 +146,9 @@ Triggered when:
    - Message should reference the Linear project/issue
 
 8. **Ask about Slack notifications**
-   - Ask user: "Would you like progress updates posted to Slack? If yes, provide a Slack incoming webhook URL."
+   - Ask user: "Would you like progress updates posted to Slack? If yes, provide a Slack workflow webhook URL."
+   - If user wants Slack notifications, explain setup:
+     > Create a Slack workflow with a webhook trigger. Add a custom variable named `message` (type: text). This will receive the progress updates.
    - If provided, save `slackWebhookUrl` to `.claude-linear-agent.json`
    - Ensure `.claude-linear-agent.json` is added to `.gitignore` (create if needed)
 
