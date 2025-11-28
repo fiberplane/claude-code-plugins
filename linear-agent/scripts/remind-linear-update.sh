@@ -1,19 +1,20 @@
 #!/bin/bash
-# PreToolUse hook for TodoWrite - reminds agent to also update Linear
+# PreToolUse hook for TodoWrite/Task - reminds agent to post updates to Linear
 
 STATE_FILE=".claude-linear-agent.json"
 
 # Only inject reminder if linear-agent workflow is active
 if [ -f "$STATE_FILE" ]; then
   PHASE=$(grep -o '"phase":\s*"[^"]*"' "$STATE_FILE" | sed 's/"phase":\s*"//' | sed 's/"$//')
+  LINEAR_ID=$(grep -o '"linearId":\s*"[^"]*"' "$STATE_FILE" | sed 's/"linearId":\s*"//' | sed 's/"$//')
 
   # Only remind during coding phase when actively implementing
   if [ "$PHASE" = "coding" ]; then
-    cat << 'EOF'
+    cat << EOF
 {
   "decision": "allow",
   "hookSpecificOutput": {
-    "additionalContext": "[Linear Agent Reminder] You're updating the todo list - also add a comment to the current Linear issue with this progress update. Keep Linear in sync with your work."
+    "additionalContext": "[Linear Update Required] Post a comment to $LINEAR_ID: what you're about to do and why (2-3 sentences max). Use create_comment for issues or update the project. Example: 'Starting auth middleware implementation. Need to validate JWT tokens before route handlers run.'"
   }
 }
 EOF
