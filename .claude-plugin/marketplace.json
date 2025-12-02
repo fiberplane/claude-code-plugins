@@ -22,7 +22,7 @@
 		{
 			"name": "fp-agent",
 			"description": "Local-first project management for AI agents. Track issues, plans, and progress in git-friendly markdown files.",
-			"version": "0.2.0",
+			"version": "0.3.0",
 			"author": {
 				"name": "Fiberplane",
 				"email": "support@fiberplane.com"
