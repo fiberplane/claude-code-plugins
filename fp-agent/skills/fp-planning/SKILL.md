@@ -214,7 +214,7 @@ Review the plan:
 
 ```bash
 # Add missing dependency
-fp issue update FP-5 --depends "FP-2,FP-4"
+fp issue update --depends "FP-2,FP-4" FP-5
 
 # Break down large task
 fp issue create \
@@ -259,7 +259,7 @@ Ask:
 
 Model dependencies explicitly:
 ```bash
-fp issue update FP-X --depends "FP-Y,FP-Z"
+fp issue update --depends "FP-Y,FP-Z" FP-X
 ```
 
 ### 4. Specify Hot Files
@@ -331,18 +331,18 @@ fp issue create \
   --depends "FP-3"
 
 # Update dependent tasks
-fp issue update FP-4 --depends "FP-2,FP-3,FP-7"
+fp issue update --depends "FP-2,FP-3,FP-7" FP-4
 ```
 
 ### Adjusting Dependencies
 
 ```bash
 # Realized FP-5 doesn't need FP-4 after all
-fp issue update FP-5 --depends "FP-2"  # This replaces the entire dependency list
+fp issue update --depends "FP-2" FP-5  # This replaces the entire dependency list
 
 # To add a dependency (without removing existing), you need to include all:
 fp issue show FP-5  # Check current dependencies
-fp issue update FP-5 --depends "FP-2,FP-4,FP-6"  # Include old + new
+fp issue update --depends "FP-2,FP-4,FP-6" FP-5  # Include old + new
 ```
 
 ### Splitting Large Tasks
@@ -365,8 +365,8 @@ fp comment FP-3 "Broke down into sub-tasks: FP-10, FP-11, FP-12"
 ```bash
 # Need to work on FP-5 before FP-4
 # Update dependencies to reflect new order
-fp issue update FP-4 --depends "FP-2,FP-5"
-fp issue update FP-5 --depends "FP-2"
+fp issue update --depends "FP-2,FP-5" FP-4
+fp issue update --depends "FP-2" FP-5
 
 # Document why
 fp comment FP-1 "Reordered plan: UI mockups (FP-5) before backend (FP-4) to get design feedback early"
@@ -404,16 +404,16 @@ Hot files help agents:
 
 ```bash
 # New feature: include all new and modified files
-fp issue update FP-2 --files "src/auth/oauth.ts,src/routes/auth.ts,tests/auth.test.ts"
+fp issue update --files "src/auth/oauth.ts,src/routes/auth.ts,tests/auth.test.ts" FP-2
 
 # Bug fix: usually just 1-2 files
-fp issue update FP-8 --files "src/utils/validate.ts,tests/validate.test.ts"
+fp issue update --files "src/utils/validate.ts,tests/validate.test.ts" FP-8
 
 # Refactoring: may include many files
-fp issue update FP-9 --files "src/models/user.ts,src/models/session.ts,src/auth/session.ts,src/middleware/auth.ts"
+fp issue update --files "src/models/user.ts,src/models/session.ts,src/auth/session.ts,src/middleware/auth.ts" FP-9
 
 # Config change
-fp issue update FP-10 --files "wrangler.jsonc,.env.example,README.md"
+fp issue update --files "wrangler.jsonc,.env.example,README.md" FP-10
 ```
 
 ## Collaborative Planning
@@ -443,7 +443,7 @@ fp issue create --title "Notification data model" --parent FP-1
 **Phase 3: Human reviews and adjusts**
 ```bash
 # Human updates based on business constraints
-fp issue update FP-3 --depends "FP-2,FP-7"
+fp issue update --depends "FP-2,FP-7" FP-3
 fp comment FP-1 "Updated plan: need to integrate with existing notification system (FP-7)"
 ```
 
@@ -598,7 +598,7 @@ Use the `fp-workflow` skill to:
 During execution, update the plan:
 ```bash
 # Discovered new dependency
-fp issue update FP-5 --depends "FP-2,FP-4,FP-8"
+fp issue update --depends "FP-2,FP-4,FP-8" FP-5
 fp comment FP-5 "Added dependency on FP-8: need shared utility functions"
 
 # Realized task is too big

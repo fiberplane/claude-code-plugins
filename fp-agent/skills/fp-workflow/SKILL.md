@@ -76,7 +76,7 @@ When looking at the tree output, identify tasks that:
 
 **Start working on an issue:**
 ```bash
-fp issue update FP-2 --status InProgress --assignee <your-agent-name>
+fp issue update --status InProgress --assignee <your-agent-name> FP-2
 ```
 
 **Log that you're starting:**
@@ -93,20 +93,20 @@ fp comment FP-2 "Completed schema design. Added User, Session, Token models to s
 
 **Update hot files as you discover them:**
 ```bash
-fp issue update FP-2 --files "src/models/user.ts,src/models/session.ts,src/models/token.ts"
+fp issue update --files "src/models/user.ts,src/models/session.ts,src/models/token.ts" FP-2
 ```
 
 ### 5. Mark Completion
 
 **When work is done and ready for review:**
 ```bash
-fp issue update FP-2 --status InReview
+fp issue update --status InReview FP-2
 fp comment FP-2 "Implementation complete. All tests passing. Ready for review."
 ```
 
 **When work is fully done (no review needed):**
 ```bash
-fp issue update FP-2 --status Done
+fp issue update --status Done FP-2
 fp comment FP-2 "Task completed. [Summary of what was done]"
 ```
 
@@ -114,7 +114,7 @@ fp comment FP-2 "Task completed. [Summary of what was done]"
 
 **If you discover a blocker:**
 ```bash
-fp issue update FP-2 --status Blocked
+fp issue update --status Blocked FP-2
 fp comment FP-2 "Blocked: [describe the blocker and what's needed to unblock]"
 ```
 
@@ -163,7 +163,7 @@ fp issue create --title "Fix missing database migration" --parent FP-2
 
 2. **Update hot files** as you discover relevant code:
    ```bash
-   fp issue update FP-2 --files "file1.ts,file2.ts,file3.ts"
+   fp issue update --files "file1.ts,file2.ts,file3.ts" FP-2
    ```
 
 3. **Keep status current**:
@@ -217,7 +217,7 @@ fp log FP-3
 fp context FP-3
 
 # 4. Claim the work
-fp issue update FP-3 --assignee <your-name>
+fp issue update --assignee <your-name> FP-3
 fp comment FP-3 "Taking over from [previous-agent]. Will continue with: [next steps]"
 ```
 
@@ -227,10 +227,10 @@ fp comment FP-3 "Taking over from [previous-agent]. Will continue with: [next st
 # You're working on FP-5 and realize it needs FP-2 to be done first
 
 # 1. Add the dependency
-fp issue update FP-5 --depends "FP-2"
+fp issue update --depends "FP-2" FP-5
 
 # 2. Block yourself
-fp issue update FP-5 --status Blocked
+fp issue update --status Blocked FP-5
 fp comment FP-5 "Blocked on FP-2: Need schema definitions before implementing business logic"
 
 # 3. Work on FP-2 instead if possible, or find another task
@@ -251,7 +251,7 @@ fp issue create --title "Token refresh logic" --parent FP-4
 fp comment FP-4 "Broke down into sub-tasks: FP-10, FP-11, FP-12. Will work on these sequentially."
 
 # 3. Work on sub-issues instead
-fp issue update FP-10 --status InProgress --assignee <your-name>
+fp issue update --status InProgress --assignee <your-name> FP-10
 ```
 
 ### Pattern: Reporting Test Failures
@@ -267,7 +267,7 @@ fp comment FP-6 "Tests failing: [describe failures]. Investigating root cause."
 
 # 3. Once fixed
 fp comment FP-6 "Fixed test failures. All tests now passing. [Explain what was fixed]"
-fp issue update FP-6 --status InReview
+fp issue update --status InReview FP-6
 ```
 
 ## Anti-Patterns (Avoid These)
@@ -278,7 +278,7 @@ fp issue update FP-6 --status InReview
 # This causes confusion for other agents
 
 # GOOD: Always claim the work first
-fp issue update FP-2 --status InProgress --assignee <your-name>
+fp issue update --status InProgress --assignee <your-name> FP-2
 fp comment FP-2 "Starting work"
 ```
 
@@ -298,17 +298,17 @@ fp comment FP-2 "All tests passing"
 ### ❌ Leaving work in ambiguous state
 ```bash
 # BAD: End session without final comment
-fp issue update FP-2 --status InProgress  # Still in progress, but what's the state?
+fp issue update --status InProgress FP-2  # Still in progress, but what's the state?
 
 # GOOD: Clear handoff
 fp comment FP-2 "End of session. Completed auth middleware. TODO: Add rate limiting. File: src/middleware/auth.ts is 80% done."
-fp issue update FP-2 --status InProgress
+fp issue update --status InProgress FP-2
 ```
 
 ### ❌ Ignoring dependencies
 ```bash
 # BAD: Start FP-5 without checking if FP-2 is done
-fp issue update FP-5 --status InProgress
+fp issue update --status InProgress FP-5
 # Later discover you need things from FP-2...
 
 # GOOD: Check dependencies first
@@ -323,7 +323,7 @@ fp issue show FP-2  # Check FP-2 status
 # Next agent has no idea which files are relevant
 
 # GOOD: Update hot files as you go
-fp issue update FP-2 --files "src/auth/login.ts,src/auth/signup.ts,src/middleware/auth.ts"
+fp issue update --files "src/auth/login.ts,src/auth/signup.ts,src/middleware/auth.ts" FP-2
 ```
 
 ## Integration with Context Commands

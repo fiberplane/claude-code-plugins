@@ -34,7 +34,7 @@ fp issue create --title "Implement data layer" --parent MYPROJ-1
 
 3. Track work:
 ```bash
-fp issue update MYPROJ-2 --status InProgress
+fp issue update --status InProgress MYPROJ-2
 fp comment MYPROJ-2 "Started implementation..."
 ```
 
