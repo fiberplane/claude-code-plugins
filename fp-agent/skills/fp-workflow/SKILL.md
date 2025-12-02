@@ -1,25 +1,11 @@
+---
+name: FP Workflow
+description: This skill should be used when the user asks to "start working on issue", "what should I work on", "pick up task", "continue work", "find next task", "hand off", or "end session". Provides agent work session patterns for the FP CLI including claiming work, logging progress, status transitions, and session handoffs.
+---
+
 # FP Workflow Skill
 
 **Agent work session patterns for the FP CLI**
-
-## When to Use This Skill
-
-This skill activates when you need to:
-- Start working on an issue
-- Find the next actionable task
-- Pick up work from where you or another agent left off
-- Log progress during development
-- Transition issue status through the workflow
-- Hand off work at the end of a session
-
-### Trigger Phrases
-- "start working on issue"
-- "what should I work on"
-- "pick up task"
-- "continue work"
-- "find next task"
-- "hand off"
-- "end session"
 
 ## Core Workflow Concepts
 

@@ -1,25 +1,11 @@
+---
+name: FP Planning
+description: This skill should be used when the user asks to "create a plan", "break down feature", "design implementation", "structure this work", "plan out", "decompose task", or "create roadmap". Provides plan creation and breakdown patterns for the FP CLI including issue hierarchy, dependency modeling, and hot files management.
+---
+
 # FP Planning Skill
 
 **Plan creation and breakdown patterns for the FP CLI**
-
-## When to Use This Skill
-
-This skill activates when you need to:
-- Create a comprehensive plan for a feature or project
-- Break down a large feature into manageable tasks
-- Design an implementation strategy
-- Structure work hierarchically
-- Model dependencies between tasks
-- Identify relevant files for each task
-
-### Trigger Phrases
-- "create a plan"
-- "break down feature"
-- "design implementation"
-- "structure this work"
-- "plan out"
-- "decompose task"
-- "create roadmap"
 
 ## Core Planning Concepts
 
@@ -324,101 +310,12 @@ These often depend on implementation tasks being complete.
 
 ## Common Planning Patterns
 
-### Pattern: Foundation → Implementation → Integration
-
-```bash
-# Step 1: Foundation
-fp issue create --title "Data models" --parent FP-1
-
-# Step 2: Core logic (depends on foundation)
-fp issue create --title "Business logic" --parent FP-1 --depends "FP-2"
-
-# Step 3: API/Interface (depends on business logic)
-fp issue create --title "API endpoints" --parent FP-1 --depends "FP-3"
-
-# Step 4: UI (depends on API)
-fp issue create --title "UI components" --parent FP-1 --depends "FP-4"
-```
-
-### Pattern: Vertical Slices
-
-For full-stack features, consider vertical slices:
-
-```bash
-# Slice 1: User registration (full stack)
-fp issue create --title "User registration flow" --parent FP-1
-
-# Slice 2: User login (full stack)
-fp issue create --title "User login flow" --parent FP-1 --depends "FP-2"
-
-# Slice 3: User profile (full stack)
-fp issue create --title "User profile page" --parent FP-1 --depends "FP-3"
-```
-
-Each slice goes from database → backend → frontend.
-
-### Pattern: Parallel Tracks
-
-For work that can happen concurrently:
-
-```bash
-# Track 1: Backend
-fp issue create --title "API implementation" --parent FP-1
-
-# Track 2: Frontend (can start in parallel)
-fp issue create --title "UI mockups and components" --parent FP-1
-
-# Track 3: Integration (needs both)
-fp issue create --title "Wire up frontend to API" --parent FP-1 --depends "FP-2,FP-3"
-```
-
-### Pattern: Research → Implementation
-
-For unclear requirements:
-
-```bash
-# Phase 1: Spike/Research
-fp issue create \
-  --title "Research OAuth providers" \
-  --parent FP-1 \
-  --description "Compare GitHub, Google, and Auth0. Recommend one. Expected: 2-3 hours, decision document."
-
-# Phase 2: Implementation (waits for research)
-fp issue create \
-  --title "Implement chosen OAuth provider" \
-  --parent FP-1 \
-  --depends "FP-2" \
-  --description "Implement the OAuth provider selected in FP-2"
-```
-
-### Pattern: Incremental Feature Flags
-
-For gradual rollout:
-
-```bash
-# Phase 1: Backend with feature flag
-fp issue create \
-  --title "Backend logic (behind feature flag)" \
-  --parent FP-1
-
-# Phase 2: Testing with flag enabled
-fp issue create \
-  --title "Internal testing" \
-  --parent FP-1 \
-  --depends "FP-2"
-
-# Phase 3: UI (still flagged)
-fp issue create \
-  --title "UI components (feature-flagged)" \
-  --parent FP-1 \
-  --depends "FP-3"
-
-# Phase 4: Full release
-fp issue create \
-  --title "Remove feature flag and release" \
-  --parent FP-1 \
-  --depends "FP-4"
-```
+For detailed patterns with examples, see **`references/patterns.md`**:
+- Foundation → Implementation → Integration
+- Vertical Slices
+- Parallel Tracks
+- Research → Implementation
+- Incremental Feature Flags
 
 ## Updating Plans Mid-Execution
 
@@ -574,75 +471,11 @@ fp log FP-1
 
 ## Plan Templates
 
-### Template: Full-Stack Feature
-
-```bash
-# 1. Plan issue
-fp issue create --title "[Feature Name]" --description "[Goals, approach, success criteria]"
-
-# 2. Data models
-fp issue create --title "Data models and schema" --parent FP-X
-
-# 3. Backend API
-fp issue create --title "Backend API endpoints" --parent FP-X --depends "FP-Y"
-
-# 4. Frontend UI
-fp issue create --title "UI components" --parent FP-X --depends "FP-Y"
-
-# 5. Integration
-fp issue create --title "Frontend-backend integration" --parent FP-X --depends "FP-Z,FP-A"
-
-# 6. Testing
-fp issue create --title "Tests and documentation" --parent FP-X --depends "FP-B"
-```
-
-### Template: Bug Fix
-
-```bash
-# 1. Investigation
-fp issue create --title "Investigate [bug description]" --description "Reproduce, identify root cause, propose fix"
-
-# 2. Fix implementation
-fp issue create --title "Fix [bug]" --depends "FP-Y"
-
-# 3. Regression test
-fp issue create --title "Add regression test for [bug]" --depends "FP-Z"
-```
-
-### Template: Refactoring
-
-```bash
-# 1. Plan
-fp issue create --title "Refactor [component]" --description "Goals: [why], Scope: [what]"
-
-# 2. Extract/reorganize
-fp issue create --title "Extract shared logic" --parent FP-X
-
-# 3. Update call sites
-fp issue create --title "Update all call sites" --parent FP-X --depends "FP-Y"
-
-# 4. Remove old code
-fp issue create --title "Remove deprecated code" --parent FP-X --depends "FP-Z"
-
-# 5. Update tests
-fp issue create --title "Update tests for new structure" --parent FP-X --depends "FP-A"
-```
-
-### Template: Performance Optimization
-
-```bash
-# 1. Baseline
-fp issue create --title "Establish performance baseline" --parent FP-X
-
-# 2. Identify bottlenecks
-fp issue create --title "Profile and identify bottlenecks" --parent FP-X --depends "FP-Y"
-
-# 3. Optimize
-fp issue create --title "Optimize [specific area]" --parent FP-X --depends "FP-Z"
-
-# 4. Verify improvement
-fp issue create --title "Measure performance improvement" --parent FP-X --depends "FP-A"
-```
+For ready-to-use templates, see **`references/templates.md`**:
+- Full-Stack Feature
+- Bug Fix
+- Refactoring
+- Performance Optimization
 
 ## Anti-Patterns (Avoid These)
 
