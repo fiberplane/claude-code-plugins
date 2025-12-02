@@ -49,6 +49,22 @@ Long-running agent workflow using Linear as the project management backend. Impl
 
 [Full documentation](./linear-agent/README.md)
 
+### fp-agent
+
+Local-first project management for AI agents using the `fp` CLI. All data stored as git-friendly markdown files.
+
+**Features:**
+- Track issues and plans in `.fp/` directory (markdown + YAML frontmatter)
+- Auto-register agent identity across sessions
+- Model task dependencies and hot files
+- Preserve context across session compaction
+
+**Usage:** `/fp-agent`
+
+**Prerequisites:** Install the `fp` CLI from [fiberplane/nocturne](https://github.com/fiberplane/nocturne/tree/main/apps/fp)
+
+[Full documentation](./fp-agent/README.md)
+
 ## Development
 
 To test a plugin locally:
