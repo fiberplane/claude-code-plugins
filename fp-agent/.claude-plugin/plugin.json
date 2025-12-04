@@ -1,6 +1,6 @@
 {
   "name": "fp-agent",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Local-first project management for AI agents using the fp CLI. Track issues, plans, and progress in git-friendly markdown files.",
   "author": {
     "name": "Fiberplane",
@@ -13,5 +13,6 @@
     "local-first",
     "markdown"
   ],
-  "commands": "./commands"
+  "commands": "./commands",
+  "hooks": "./hooks/hooks.json"
 }
