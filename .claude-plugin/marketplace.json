@@ -9,17 +9,6 @@
 	},
 	"plugins": [
 		{
-			"name": "linear-agent",
-			"description": "Long-running agent workflow with Linear. Scaffolds all features upfront, then implements one per session.",
-			"version": "0.10.0",
-			"author": {
-				"name": "Laurynas",
-				"email": "laurynas@fiberplane.com"
-			},
-			"source": "./linear-agent",
-			"category": "productivity"
-		},
-		{
 			"name": "fp-agent",
 			"description": "Local-first project management for AI agents. Track issues, plans, and progress in git-friendly markdown files.",
 			"version": "0.3.0",
