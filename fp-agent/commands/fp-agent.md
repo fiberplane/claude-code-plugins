@@ -2,19 +2,30 @@
 
 Use `fp` CLI to manage local project issues and plans.
 
-## Getting Started
-```bash
-fp init                    # Initialize .fp/ in your project
-fp issue create --title "My Feature"  # Create an issue
-```
-
 ## Key Commands
-- `fp issue list` - List all issues
-- `fp issue show <id>` - Show issue details
-- `fp tree` - Visualize issue hierarchy
-- `fp context <id>` - Load issue + hot files for context
+- `fp tree` - See issue hierarchy and find work
+- `fp issue list --status todo` - Find available tasks
+- `fp issue show <id>` - View issue details
+- `fp context <id>` - Load issue + hot files
 - `fp comment <id> "message"` - Log progress
 - `fp log` - View activity history
+
+## Workflow
+```bash
+# 1. Find work
+fp tree
+fp issue list --status todo
+
+# 2. Claim and start
+fp issue update --status in-progress --assignee <name> FP-1
+
+# 3. Log progress as you work
+fp comment FP-1 "Completed X, starting Y"
+
+# 4. Complete
+fp issue update --status done FP-1
+fp comment FP-1 "Done: [summary]"
+```
 
 ## For Agents
 - `fp agent whoami` - Your identity

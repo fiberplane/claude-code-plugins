@@ -8,6 +8,7 @@ fp-agent provides structured issue tracking and context management that's:
 - **Git-friendly**: All data stored as markdown files in `.fp/`
 - **Agent-native**: Auto-registers agent identity, preserves context across sessions
 - **Dependency-aware**: Track task dependencies and blocked work
+- **Multi-project aware**: Works from any subdirectory via project registry
 
 ## Prerequisites
 
@@ -34,8 +35,8 @@ fp issue create --title "Implement data layer" --parent MYPROJ-1
 
 3. Track work:
 ```bash
-fp issue update --status InProgress MYPROJ-2
-fp comment MYPROJ-2 "Started implementation..."
+fp issue update --status in-progress MYPROJ-2   # kebab-case accepted
+fp comment MYPROJ-2 "Started implementation..."  # shorthand for 'comment add'
 ```
 
 ## Plugin Features
@@ -58,14 +59,21 @@ fp comment MYPROJ-2 "Started implementation..."
 ## Data Storage
 
 ```
+# Per-project
 .fp/
 ├── config.toml      # Project settings
-├── agents.toml      # Agent registry (gitignored)
 ├── activity.jsonl   # Activity log
 └── issues/          # Issue markdown files
     ├── PROJ-1.md
     └── PROJ-2.md
+
+# Global
+~/.fiberplane/
+├── agents.toml      # Agent identities (cross-project)
+└── projects.toml    # Project registry
 ```
+
+The CLI auto-discovers `.fp/` directories from parent/child paths.
 
 ## Links
 

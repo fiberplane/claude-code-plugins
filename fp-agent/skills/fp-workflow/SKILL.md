@@ -76,7 +76,7 @@ When looking at the tree output, identify tasks that:
 
 **Start working on an issue:**
 ```bash
-fp issue update --status InProgress --assignee <your-agent-name> FP-2
+fp issue update --status in-progress --assignee <your-agent-name> FP-2
 ```
 
 **Log that you're starting:**
@@ -100,13 +100,13 @@ fp issue update --files "src/models/user.ts,src/models/session.ts,src/models/tok
 
 **When work is done and ready for review:**
 ```bash
-fp issue update --status InReview FP-2
+fp issue update --status in-review FP-2
 fp comment FP-2 "Implementation complete. All tests passing. Ready for review."
 ```
 
 **When work is fully done (no review needed):**
 ```bash
-fp issue update --status Done FP-2
+fp issue update --status done FP-2
 fp comment FP-2 "Task completed. [Summary of what was done]"
 ```
 
@@ -114,7 +114,7 @@ fp comment FP-2 "Task completed. [Summary of what was done]"
 
 **If you discover a blocker:**
 ```bash
-fp issue update --status Blocked FP-2
+fp issue update --status blocked FP-2
 fp comment FP-2 "Blocked: [describe the blocker and what's needed to unblock]"
 ```
 
@@ -144,7 +144,7 @@ fp issue create --title "Fix missing database migration" --parent FP-2
 
 4. **Look for your in-progress work:**
    ```bash
-   fp issue list --status InProgress --assignee <your-name>
+   fp issue list --status in-progress --assignee <your-name>
    ```
 
 5. **If continuing work, load context:**
@@ -167,9 +167,9 @@ fp issue create --title "Fix missing database migration" --parent FP-2
    ```
 
 3. **Keep status current**:
-   - Move to InProgress when you start
-   - Move to Blocked if stuck
-   - Move to InReview when done
+   - Move to `in-progress` when you start
+   - Move to `blocked` if stuck
+   - Move to `in-review` when done
 
 ### Ending a Session
 
@@ -179,9 +179,9 @@ fp issue create --title "Fix missing database migration" --parent FP-2
    ```
 
 2. **Update status appropriately:**
-   - If done: `--status InReview` or `--status Done`
-   - If partially done: keep as `InProgress` with clear comment
-   - If blocked: `--status Blocked` with explanation
+   - If done: `--status in-review` or `--status done`
+   - If partially done: keep as `in-progress` with clear comment
+   - If blocked: `--status blocked` with explanation
 
 3. **Don't leave issues in limbo** - Always leave a comment explaining state
 
@@ -192,7 +192,7 @@ fp issue create --title "Fix missing database migration" --parent FP-2
 ```bash
 # 1. Check what you were working on
 fp agent whoami
-fp issue list --status InProgress --assignee <your-name>
+fp issue list --status in-progress --assignee <your-name>
 
 # 2. Load context for the issue
 fp context FP-5
@@ -230,7 +230,7 @@ fp comment FP-3 "Taking over from [previous-agent]. Will continue with: [next st
 fp issue update --depends "FP-2" FP-5
 
 # 2. Block yourself
-fp issue update --status Blocked FP-5
+fp issue update --status blocked FP-5
 fp comment FP-5 "Blocked on FP-2: Need schema definitions before implementing business logic"
 
 # 3. Work on FP-2 instead if possible, or find another task
@@ -251,7 +251,7 @@ fp issue create --title "Token refresh logic" --parent FP-4
 fp comment FP-4 "Broke down into sub-tasks: FP-10, FP-11, FP-12. Will work on these sequentially."
 
 # 3. Work on sub-issues instead
-fp issue update --status InProgress --assignee <your-name> FP-10
+fp issue update --status in-progress --assignee <your-name> FP-10
 ```
 
 ### Pattern: Reporting Test Failures
@@ -267,7 +267,7 @@ fp comment FP-6 "Tests failing: [describe failures]. Investigating root cause."
 
 # 3. Once fixed
 fp comment FP-6 "Fixed test failures. All tests now passing. [Explain what was fixed]"
-fp issue update --status InReview FP-6
+fp issue update --status in-review FP-6
 ```
 
 ## Anti-Patterns (Avoid These)
@@ -278,7 +278,7 @@ fp issue update --status InReview FP-6
 # This causes confusion for other agents
 
 # GOOD: Always claim the work first
-fp issue update --status InProgress --assignee <your-name> FP-2
+fp issue update --status in-progress --assignee <your-name> FP-2
 fp comment FP-2 "Starting work"
 ```
 
@@ -298,17 +298,17 @@ fp comment FP-2 "All tests passing"
 ### ❌ Leaving work in ambiguous state
 ```bash
 # BAD: End session without final comment
-fp issue update --status InProgress FP-2  # Still in progress, but what's the state?
+fp issue update --status in-progress FP-2  # Still in progress, but what's the state?
 
 # GOOD: Clear handoff
 fp comment FP-2 "End of session. Completed auth middleware. TODO: Add rate limiting. File: src/middleware/auth.ts is 80% done."
-fp issue update --status InProgress FP-2
+fp issue update --status in-progress FP-2
 ```
 
 ### ❌ Ignoring dependencies
 ```bash
 # BAD: Start FP-5 without checking if FP-2 is done
-fp issue update --status InProgress FP-5
+fp issue update --status in-progress FP-5
 # Later discover you need things from FP-2...
 
 # GOOD: Check dependencies first
@@ -405,13 +405,13 @@ Use this to:
 - [ ] `fp agent whoami` - Know who you are
 - [ ] `fp tree` - See the full picture
 - [ ] `fp log --limit 10` - Check recent activity
-- [ ] `fp issue list --status InProgress --assignee <me>` - Resume my work
+- [ ] `fp issue list --status in-progress --assignee <me>` - Resume my work
 
 ### During Work Checklist
-- [ ] Claim work with `--status InProgress --assignee <me>`
+- [ ] Claim work with `--status in-progress --assignee <me>`
 - [ ] Comment when starting, at milestones, when done
 - [ ] Update hot files as you discover them
-- [ ] Keep status current (InProgress → InReview → Done)
+- [ ] Keep status current (in-progress → in-review → done)
 
 ### End Session Checklist
 - [ ] Add final comment with progress and next steps
@@ -424,7 +424,7 @@ Use this to:
 ### "I don't know what to work on"
 ```bash
 fp tree                          # See full picture
-fp issue list --status Todo      # See available tasks
+fp issue list --status todo      # See available tasks
 # Pick tasks with no dependencies or all dependencies Done
 ```
 
@@ -445,8 +445,8 @@ fp tree                          # Understand issue hierarchy
 ### "Multiple agents working on same codebase"
 ```bash
 fp log --limit 20                # See recent activity
-fp issue list --status InProgress # See what's claimed
-# Don't start work on InProgress issues assigned to others
+fp issue list --status in-progress # See what's claimed
+# Don't start work on in-progress issues assigned to others
 # If you must take over, comment explaining why
 ```
 
