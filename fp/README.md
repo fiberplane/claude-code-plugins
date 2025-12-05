@@ -1,4 +1,4 @@
-# fp-agent
+# fp
 
 Local-first project management for AI agents using the fp CLI.
 
@@ -54,7 +54,7 @@ fp comment MYPROJ-2 "Started implementation..."  # shorthand for 'comment add'
 
 ### Commands
 
-- `/fp-agent`: Quick reference for fp CLI commands
+- `/fp`: Quick reference for fp CLI commands
 
 ## Data Storage
 
@@ -74,8 +74,3 @@ fp comment MYPROJ-2 "Started implementation..."  # shorthand for 'comment add'
 ```
 
 The CLI auto-discovers `.fp/` directories from parent/child paths.
-
-## Links
-
-- [FP CLI Source](https://github.com/fiberplane/nocturne/tree/main/apps/fp)
-- [SPEC.md](https://github.com/fiberplane/nocturne/blob/main/apps/fp/SPEC.md)

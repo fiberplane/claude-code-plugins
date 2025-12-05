@@ -36,19 +36,6 @@ Or configure via `~/.claude/settings.json`:
 
 ## Available Plugins
 
-### linear-agent
-
-Long-running agent workflow using Linear as the project management backend. Implements Anthropic's "effective harnesses for long-running agents" pattern.
-
-**Features:**
-- Break down project briefs into Linear issues
-- Scaffold all features upfront to prevent architectural conflicts
-- Implement one feature per session with progress tracked in Linear
-
-**Usage:** `/linear-agent`
-
-[Full documentation](./linear-agent/README.md)
-
 ### fp-agent
 
 Local-first project management for AI agents using the `fp` CLI. All data stored as git-friendly markdown files.
@@ -59,7 +46,7 @@ Local-first project management for AI agents using the `fp` CLI. All data stored
 - Model task dependencies and hot files
 - Preserve context across session compaction
 
-**Usage:** `/fp-agent`
+**Usage:** `/fp`
 
 **Prerequisites:** Install the `fp` CLI from [fiberplane/nocturne](https://github.com/fiberplane/nocturne/tree/main/apps/fp)
 
@@ -70,5 +57,5 @@ Local-first project management for AI agents using the `fp` CLI. All data stored
 To test a plugin locally:
 
 ```bash
-claude --plugin ./linear-agent
+claude plugin install ./fp-agent
 ```

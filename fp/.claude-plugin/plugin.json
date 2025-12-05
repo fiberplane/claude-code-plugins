@@ -1,0 +1,18 @@
+{
+  "name": "fp",
+  "version": "0.7.0",
+  "description": "Local-first issue tracking and code review for humans and AI agents.",
+  "author": {
+    "name": "Fiberplane",
+    "email": "support@fiberplane.com"
+  },
+  "keywords": [
+    "issue-tracking",
+    "code-review",
+    "agent",
+    "workflow",
+    "local-first",
+    "markdown"
+  ],
+  "commands": "./commands"
+}

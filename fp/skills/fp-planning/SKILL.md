@@ -479,6 +479,32 @@ For ready-to-use templates, see **`references/templates.md`**:
 
 ## Anti-Patterns (Avoid These)
 
+### ❌ Using markdown task lists instead of subissues
+```markdown
+# BAD: Task checkboxes in issue description
+## Tasks
+- [ ] Create apps/fp-vscode directory
+- [ ] Set up package.json with extension manifest
+- [ ] Configure esbuild to bundle extension
+- [ ] Create extension.ts with activate/deactivate
+```
+
+This is wrong because:
+- Checkboxes are not trackable by the FP system
+- No dependencies can be modeled
+- No status, assignee, or activity tracking
+- Agents cannot pick up individual tasks
+
+```bash
+# GOOD: Create proper subissues
+fp issue create --title "Create apps/fp-vscode directory" --parent FP-1
+fp issue create --title "Set up package.json with extension manifest" --parent FP-1 --depends "FP-2"
+fp issue create --title "Configure esbuild to bundle extension" --parent FP-1 --depends "FP-3"
+fp issue create --title "Create extension.ts with activate/deactivate" --parent FP-1 --depends "FP-4"
+```
+
+**Rule: NEVER write `- [ ]` task lists in issue descriptions. Always create subissues with `--parent`.**
+
 ### ❌ Creating tasks without parent
 ```bash
 # BAD: Orphan tasks
@@ -546,7 +572,8 @@ fp issue create \
 
 ### Planning Checklist
 - [ ] Create parent/plan issue with clear goals
-- [ ] Break down into atomic tasks (1-3 hours each)
+- [ ] Break down into atomic subissues with `--parent` (1-3 hours each)
+- [ ] **Never use `- [ ]` task lists** - always create proper subissues
 - [ ] Specify dependencies between tasks
 - [ ] Identify hot files for each task
 - [ ] Write clear descriptions (what, why, how, done)
