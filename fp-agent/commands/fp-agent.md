@@ -16,8 +16,8 @@ Use `fp` CLI to manage local project issues and plans.
 fp tree
 fp issue list --status todo
 
-# 2. Claim and start
-fp issue update --status in-progress --assignee <name> FP-1
+# 2. Claim and start (uses your agent name from environment)
+fp issue update --status in-progress --assignee $FP_AGENT_NAME FP-1
 
 # 3. Log progress as you work
 fp comment FP-1 "Completed X, starting Y"

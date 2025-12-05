@@ -39,7 +39,9 @@ Issues flow through these states:
 fp agent whoami
 ```
 
-This tells you your agent name (e.g., "swift-falcon"). Your identity is set automatically when your session starts.
+This tells you your agent name (e.g., "swift-falcon"). Your identity is set automatically when your session starts and stored in the `$FP_AGENT_NAME` environment variable.
+
+**Note:** Use `$FP_AGENT_NAME` in commands instead of typing your agent name manually - it's always available after session start.
 
 ### 2. Find Next Task
 
@@ -57,7 +59,7 @@ fp issue list --status Todo
 
 **Find issues assigned to you:**
 ```bash
-fp issue list --assignee <your-agent-name>
+fp issue list --assignee $FP_AGENT_NAME
 ```
 
 **Check what's in progress:**
@@ -76,13 +78,28 @@ When looking at the tree output, identify tasks that:
 
 **Start working on an issue:**
 ```bash
-fp issue update --status in-progress --assignee <your-agent-name> FP-2
+fp issue update --status in-progress --assignee $FP_AGENT_NAME FP-2
 ```
+
+When you mark an issue as `InProgress`, the system automatically captures a snapshot of the working directory. This enables tracking exactly what files change during your work on the issue.
+
+**When to create an issue:** For non-trivial tasks (multi-file changes, new features, bug fixes, refactoring), create and claim an issue before starting. This provides:
+- Change tracking via snapshots
+- Context preservation for handoffs
+- Activity log for debugging and review
+
+Quick fixes (typos, single-line changes, formatting) don't need issues.
 
 **Log that you're starting:**
 ```bash
 fp comment FP-2 "Starting work on this task. First step: [describe what you'll do]"
 ```
+
+**Check your current issue:**
+```bash
+fp agent current-issue
+```
+Returns the issue ID you're currently working on (InProgress status). Returns empty/error if no issue in progress.
 
 ### 4. Log Progress
 
@@ -144,7 +161,7 @@ fp issue create --title "Fix missing database migration" --parent FP-2
 
 4. **Look for your in-progress work:**
    ```bash
-   fp issue list --status in-progress --assignee <your-name>
+   fp issue list --status in-progress --assignee $FP_AGENT_NAME
    ```
 
 5. **If continuing work, load context:**
@@ -191,8 +208,7 @@ fp issue create --title "Fix missing database migration" --parent FP-2
 
 ```bash
 # 1. Check what you were working on
-fp agent whoami
-fp issue list --status in-progress --assignee <your-name>
+fp issue list --status in-progress --assignee $FP_AGENT_NAME
 
 # 2. Load context for the issue
 fp context FP-5
@@ -217,7 +233,7 @@ fp log FP-3
 fp context FP-3
 
 # 4. Claim the work
-fp issue update --assignee <your-name> FP-3
+fp issue update --assignee $FP_AGENT_NAME FP-3
 fp comment FP-3 "Taking over from [previous-agent]. Will continue with: [next steps]"
 ```
 
@@ -251,7 +267,7 @@ fp issue create --title "Token refresh logic" --parent FP-4
 fp comment FP-4 "Broke down into sub-tasks: FP-10, FP-11, FP-12. Will work on these sequentially."
 
 # 3. Work on sub-issues instead
-fp issue update --status in-progress --assignee <your-name> FP-10
+fp issue update --status in-progress --assignee $FP_AGENT_NAME FP-10
 ```
 
 ### Pattern: Reporting Test Failures
@@ -272,15 +288,30 @@ fp issue update --status in-review FP-6
 
 ## Anti-Patterns (Avoid These)
 
-### ❌ Starting work without claiming
+### ❌ Complex work without an issue
 ```bash
-# BAD: Start working without updating status
-# This causes confusion for other agents
+# BAD: Multi-file refactoring, new feature, or bug fix without issue tracking
+# - No snapshot to show what changed
+# - No context for handoffs
+# - No activity log
 
-# GOOD: Always claim the work first
-fp issue update --status in-progress --assignee <your-name> FP-2
-fp comment FP-2 "Starting work"
+# GOOD: Create and claim an issue for non-trivial work
+fp issue create --title "Refactor auth middleware"
+fp issue update --status in-progress --assignee $FP_AGENT_NAME FP-X
+fp comment FP-X "Starting work"
 ```
+
+**When to use issues:**
+- Multi-file changes
+- New features
+- Bug fixes
+- Refactoring
+- Any work that might need handoff
+
+**When issues are optional:**
+- Single-line typo fixes
+- Formatting changes
+- Quick documentation updates
 
 ### ❌ Silent progress (no comments)
 ```bash
@@ -381,8 +412,7 @@ fp log FP-2
 fp log --author swift-falcon
 
 # Your own activity
-fp agent whoami  # Note your name
-fp log --author <your-name>
+fp log --author $FP_AGENT_NAME
 ```
 
 ### Understanding Activity Log
@@ -405,10 +435,10 @@ Use this to:
 - [ ] `fp agent whoami` - Know who you are
 - [ ] `fp tree` - See the full picture
 - [ ] `fp log --limit 10` - Check recent activity
-- [ ] `fp issue list --status in-progress --assignee <me>` - Resume my work
+- [ ] `fp issue list --status in-progress --assignee $FP_AGENT_NAME` - Resume my work
 
 ### During Work Checklist
-- [ ] Claim work with `--status in-progress --assignee <me>`
+- [ ] Claim work with `--status in-progress --assignee $FP_AGENT_NAME`
 - [ ] Comment when starting, at milestones, when done
 - [ ] Update hot files as you discover them
 - [ ] Keep status current (in-progress → in-review → done)
