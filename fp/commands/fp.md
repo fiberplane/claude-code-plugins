@@ -36,29 +36,32 @@ If yes, run `fp init` and then proceed to Path C.
 
 ### Path C: Ready to work (fp installed + project initialized)
 
-1. **Load current context**:
+1. **Show issue tree** (gives context on project structure):
 
 !`fp tree 2>/dev/null || echo "No issues yet"`
 
+2. **Show current work** (if any):
+
 !`fp context --current --format compact 2>/dev/null || echo "No current work in progress"`
 
-2. **Show available tasks**:
+3. **Show open issues** (todo + in-progress):
 
-!`fp issue list --status todo 2>/dev/null || echo "No todo tasks"`
+!`fp issue list --status todo 2>/dev/null`
+!`fp issue list --status in-progress 2>/dev/null`
 
-3. **Use AskUserQuestion** to ask the user what they want to do:
+4. **Use AskUserQuestion** to ask the user what they want to do:
    - Present the todo tasks as options (use the issue IDs and titles from the list above)
    - Include "Continue current work" (if there's in-progress work)
    - Include "Create a new task"
    - Include "Plan new work" (for breaking down a feature/project into tasks)
 
-4. **Based on selection**:
+5. **Based on selection**:
    - **Continue current work**: Load full context with `fp context --current`
    - **Pick a task**: Claim it with `fp issue update --status in-progress --assignee "$FP_AGENT_NAME" <id>`, then load context with `fp context <id>`
    - **Create new task**: Use AskUserQuestion to gather title/description, then `fp issue create`
    - **Plan new work**: Invoke the `fp-planning` skill to help break down the work into a hierarchy of issues
 
-5. **After task is selected**, use TodoWrite to create a todo list based on the issue description and hot files.
+6. **After task is selected**, use TodoWrite to create a todo list based on the issue description and hot files.
 
 ## Quick Reference
 
