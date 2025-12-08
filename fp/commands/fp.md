@@ -36,32 +36,28 @@ If yes, run `fp init` and then proceed to Path C.
 
 ### Path C: Ready to work (fp installed + project initialized)
 
-1. **Show issue tree** (gives context on project structure):
+Run these commands to load context:
 
-!`fp tree 2>&1 || echo "No issues yet"`
+```bash
+fp tree                              # Show issue hierarchy
+fp context --current --format compact # Current work (if any)
+fp issue list --status todo          # Available tasks
+fp issue list --status in-progress   # In-progress tasks
+```
 
-2. **Show current work** (if any):
+Then **use AskUserQuestion** to ask the user what they want to do:
+- Present the todo tasks as options (use the issue IDs and titles from the commands above)
+- Include "Continue current work" (if there's in-progress work)
+- Include "Create a new task"
+- Include "Plan new work" (for breaking down a feature/project into tasks)
 
-!`fp context --current --format compact 2>&1 || echo "No current work in progress"`
-
-3. **Show open issues** (todo + in-progress):
-
-!`fp issue list --status todo 2>&1 || echo "No todo issues"`
-!`fp issue list --status in-progress 2>&1 || echo "No in-progress issues"`
-
-4. **Use AskUserQuestion** to ask the user what they want to do:
-   - Present the todo tasks as options (use the issue IDs and titles from the list above)
-   - Include "Continue current work" (if there's in-progress work)
-   - Include "Create a new task"
-   - Include "Plan new work" (for breaking down a feature/project into tasks)
-
-5. **Based on selection**:
+**Based on selection**:
    - **Continue current work**: Load full context with `fp context --current`
    - **Pick a task**: Claim it with `fp issue update --status in-progress --assignee "$FP_AGENT_NAME" <id>`, then load context with `fp context <id>`
    - **Create new task**: Use AskUserQuestion to gather title/description, then `fp issue create`
    - **Plan new work**: Invoke the `fp-planning` skill to help break down the work into a hierarchy of issues
 
-6. **After task is selected**, use TodoWrite to create a todo list based on the issue description and hot files.
+**After task is selected**, use TodoWrite to create a todo list based on the issue description and hot files.
 
 ## Quick Reference
 
