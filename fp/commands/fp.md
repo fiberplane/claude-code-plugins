@@ -38,16 +38,16 @@ If yes, run `fp init` and then proceed to Path C.
 
 1. **Show issue tree** (gives context on project structure):
 
-!`fp tree 2>/dev/null || echo "No issues yet"`
+!`fp tree 2>&1 || echo "No issues yet"`
 
 2. **Show current work** (if any):
 
-!`fp context --current --format compact 2>/dev/null || echo "No current work in progress"`
+!`fp context --current --format compact 2>&1 || echo "No current work in progress"`
 
 3. **Show open issues** (todo + in-progress):
 
-!`fp issue list --status todo 2>/dev/null`
-!`fp issue list --status in-progress 2>/dev/null`
+!`fp issue list --status todo 2>&1 || echo "No todo issues"`
+!`fp issue list --status in-progress 2>&1 || echo "No in-progress issues"`
 
 4. **Use AskUserQuestion** to ask the user what they want to do:
    - Present the todo tasks as options (use the issue IDs and titles from the list above)
