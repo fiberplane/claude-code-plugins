@@ -40,6 +40,15 @@
             "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/plan-to-issue.sh"
           }
         ]
+      },
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/record-subagent.sh"
+          }
+        ]
       }
     ],
     "Stop": [
