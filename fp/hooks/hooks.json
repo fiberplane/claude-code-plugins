@@ -31,6 +31,15 @@
             "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/record-write.sh"
           }
         ]
+      },
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/plan-to-issue.sh"
+          }
+        ]
       }
     ],
     "Stop": [
@@ -40,6 +49,17 @@
           {
             "type": "prompt",
             "prompt": "Before stopping, check: Was work done on an fp issue? If yes, verify a comment was added summarizing progress and status was updated appropriately. Return 'approve' if logged or no fp work done, 'block' with reminder otherwise."
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Before this subagent stops, check: Did this subagent do work on an fp issue (edits, implementation, fixes)? If yes, ensure progress was logged with 'fp comment'. Return 'approve' if logged or no fp work done, 'block' with reminder to log progress otherwise."
           }
         ]
       }

@@ -41,7 +41,10 @@ fp agent whoami
 
 This tells you your agent name (e.g., "swift-falcon"). Your identity is set automatically when your session starts and stored in the `$FP_AGENT_NAME` environment variable.
 
-**Note:** Use `$FP_AGENT_NAME` in commands instead of typing your agent name manually - it's always available after session start.
+**Note:** Use `$FP_AGENT_NAME` in commands. If the variable is not set (e.g., in subagents), get your name with:
+```bash
+FP_AGENT_NAME=$(fp agent whoami 2>&1 | grep "Name:" | awk '{print $2}')
+```
 
 ### 2. Find Next Task
 
