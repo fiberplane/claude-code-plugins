@@ -46,29 +46,31 @@ Then run these commands to load context:
 ```bash
 fp tree                              # Show issue hierarchy
 fp context --current --format compact # Current work (if any)
-fp issue list --status todo          # Available tasks
-fp issue list --status in-progress   # In-progress tasks
+fp issue list --status open          # Active tasks
+fp issue list --status done          # Completed tasks
 ```
 
 Then **use AskUserQuestion** to ask the user what they want to do:
-- Present the todo tasks as options (use the issue IDs and titles from the commands above)
-- Include "Continue current work" (if there's in-progress work)
+- Present the open tasks as options (use the issue IDs and titles from the commands above)
+- Include "Continue current work" (if there's open work)
 - Include "Create a new task"
 - Include "Plan new work" (for breaking down a feature/project into tasks)
 
 **Based on selection**:
    - **Continue current work**: Load full context with `fp context --current`
-   - **Pick a task**: Claim it with `fp issue update --status in-progress --assignee "$FP_AGENT_NAME" <id>`, then load context with `fp context <id>`
+   - **Pick a task**: Mark it open with `fp issue update --status open <id>`, then load context with `fp context <id>`
    - **Create new task**: Use AskUserQuestion to gather title/description, then `fp issue create`
    - **Plan new work**: Invoke the `fp-planning` skill to help break down the work into a hierarchy of issues
 
-**After task is selected**, use TodoWrite to create a todo list based on the issue description and hot files.
+**After task is selected**, use TodoWrite to create a todo list based on the issue description.
 
 ## Quick Reference
 
 Once working on a task:
 - `fp comment <id> "message"` - Log progress (do this frequently!)
 - `fp issue update --status done <id>` - Mark complete
+- `fp issue diff <id>` - See changes since task started
+- `fp issue files <id>` - List changed files
 - `fp context <id>` - Reload issue context
 
 See `fp-workflow` and `fp-planning` skills for detailed patterns.

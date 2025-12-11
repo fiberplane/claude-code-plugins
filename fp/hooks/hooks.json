@@ -22,31 +22,13 @@
         ]
       }
     ],
-    "PostToolUse": [
+    "PreCompact": [
       {
-        "matcher": "Write|Edit|MultiEdit",
+        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/record-write.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "ExitPlanMode",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/plan-to-issue.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Task",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/record-subagent.sh"
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/pre-compact.sh"
           }
         ]
       }
@@ -57,7 +39,7 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Before stopping, check: Was work done on an fp issue? If yes, verify a comment was added summarizing progress and status was updated appropriately. Return 'approve' if logged or no fp work done, 'block' with reminder otherwise."
+            "prompt": "Before stopping, check if you worked on an fp issue this session. If yes:\n1. Did you log progress with `fp comment <id> \"...\"`? If not, do it now.\n2. Did you make commits for your changes? If not, commit now.\n3. Is the issue done? Update status with `fp issue update --status done <id>`.\n\nReturn 'approve' if all done (or no fp work this session). Return 'block' with what's missing otherwise."
           }
         ]
       }
@@ -68,18 +50,7 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Before this subagent stops, check: Did this subagent do work on an fp issue (edits, implementation, fixes)? If yes, ensure progress was logged with 'fp comment'. Return 'approve' if logged or no fp work done, 'block' with reminder to log progress otherwise."
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/pre-compact.sh"
+            "prompt": "Before this subagent stops: If it made code changes for an fp issue, ensure progress was logged with `fp comment <id> \"...\"` summarizing what was done. Return 'approve' if logged or no fp work, 'block' with reminder otherwise."
           }
         ]
       }

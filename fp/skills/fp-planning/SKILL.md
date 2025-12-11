@@ -1,6 +1,6 @@
 ---
 name: FP Planning
-description: This skill should be used when the user asks to "create a plan", "break down feature", "design implementation", "structure this work", "plan out", "decompose task", or "create roadmap". Provides plan creation and breakdown patterns for the FP CLI including issue hierarchy, dependency modeling, and hot files management.
+description: This skill should be used when the user asks to "create a plan", "break down feature", "design implementation", "structure this work", "plan out", "decompose task", or "create roadmap". Provides plan creation and breakdown patterns for the FP CLI including issue hierarchy and dependency modeling.
 ---
 
 # FP Planning Skill
@@ -17,7 +17,7 @@ A plan is an issue that:
 - Has a comprehensive description (the plan document)
 - Has child issues (the tasks/sub-tasks)
 - May have dependencies between children
-- Often starts with status "Todo" and transitions to "Done" when all children are done
+- Starts with status "open" and transitions to "done" when all children are done
 
 ### Issue Hierarchy
 
@@ -95,8 +95,7 @@ Files to modify:
 - src/models/user.ts
 - src/models/session.ts
 - src/models/token.ts
-- drizzle/schema.ts" \
-  --files "src/models/user.ts,src/models/session.ts,src/models/token.ts,drizzle/schema.ts"
+- drizzle/schema.ts"
 ```
 
 This creates FP-2 as a child of FP-1.
@@ -115,8 +114,7 @@ fp issue create \
 
 Files:
 - src/auth/oauth.ts (new)
-- src/routes/auth.ts (new)" \
-  --files "src/auth/oauth.ts,src/routes/auth.ts"
+- src/routes/auth.ts (new)"
 ```
 
 This creates FP-3 as a child of FP-1, dependent on FP-2.
@@ -137,8 +135,7 @@ Features:
 
 Files:
 - src/auth/session.ts (new)
-- src/middleware/auth.ts (new)" \
-  --files "src/auth/session.ts,src/middleware/auth.ts"
+- src/middleware/auth.ts (new)"
 ```
 
 This creates FP-4, dependent on both FP-2 and FP-3.
@@ -157,8 +154,7 @@ fp issue create \
 Files:
 - app/components/LoginButton.tsx (new)
 - app/components/UserProfile.tsx (new)
-- app/components/LogoutButton.tsx (new)" \
-  --files "app/components/LoginButton.tsx,app/components/UserProfile.tsx,app/components/LogoutButton.tsx"
+- app/components/LogoutButton.tsx (new)"
 ```
 
 This creates FP-5, dependent on FP-4.
@@ -178,8 +174,7 @@ fp issue create \
 Files:
 - src/auth/__tests__/*.test.ts (new)
 - README.md
-- .env.example" \
-  --files "src/auth/__tests__/oauth.test.ts,src/auth/__tests__/session.test.ts,README.md,.env.example"
+- .env.example"
 ```
 
 This creates FP-6, dependent on both FP-4 and FP-5.
@@ -192,15 +187,15 @@ fp tree
 
 You should see:
 ```
-FP-1 [Todo] Add user authentication system
-├── FP-2 [Todo] Design and implement data models
-├── FP-3 [Todo] Implement GitHub OAuth flow
+FP-1 [open] Add user authentication system
+├── FP-2 [open] Design and implement data models
+├── FP-3 [open] Implement GitHub OAuth flow
 │   └── blocked by: FP-2
-├── FP-4 [Todo] Implement session management
+├── FP-4 [open] Implement session management
 │   └── blocked by: FP-2, FP-3
-├── FP-5 [Todo] Add login UI components
+├── FP-5 [open] Add login UI components
 │   └── blocked by: FP-4
-└── FP-6 [Todo] Testing and documentation
+└── FP-6 [open] Testing and documentation
     └── blocked by: FP-4, FP-5
 ```
 
@@ -209,8 +204,7 @@ FP-1 [Todo] Add user authentication system
 Review the plan:
 1. Are dependencies correct?
 2. Are any tasks too large? (If so, break them down further)
-3. Are hot files identified?
-4. Are descriptions clear enough?
+3. Are descriptions clear enough?
 
 ```bash
 # Add missing dependency
@@ -262,21 +256,7 @@ Model dependencies explicitly:
 fp issue update --depends "FP-Y,FP-Z" FP-X
 ```
 
-### 4. Specify Hot Files
-
-For each task, identify the files that will need to be modified:
-```bash
-fp issue create \
-  --title "..." \
-  --files "src/file1.ts,src/file2.ts,tests/file1.test.ts"
-```
-
-This helps agents:
-- Understand scope quickly
-- Load relevant context
-- Avoid merge conflicts
-
-### 5. Write Clear Descriptions
+### 4. Write Clear Descriptions
 
 Good descriptions include:
 - **What**: Brief summary of the task
@@ -298,7 +278,7 @@ Done:
 - Tests verify rate limit enforcement
 ```
 
-### 6. Plan for Testing and Docs
+### 5. Plan for Testing and Docs
 
 Always include tasks for:
 - Unit tests
@@ -370,50 +350,6 @@ fp issue update --depends "FP-2" FP-5
 
 # Document why
 fp comment FP-1 "Reordered plan: UI mockups (FP-5) before backend (FP-4) to get design feedback early"
-```
-
-## Hot Files Best Practices
-
-### Why Hot Files Matter
-
-Hot files help agents:
-1. Quickly identify relevant code
-2. Load context without searching
-3. Avoid merge conflicts (know what others are touching)
-
-### When to Specify Hot Files
-
-- **At planning time**: If you know which files will be affected
-- **During work**: As agents discover relevant files
-- **At handoff**: Before marking as InReview, ensure hot files are updated
-
-### What to Include
-
-- Source files that will be created or modified
-- Test files
-- Configuration files
-- Documentation files
-
-### What to Exclude
-
-- Build artifacts (dist/, build/)
-- Dependencies (node_modules/)
-- Auto-generated files (unless you edit them)
-
-### Examples
-
-```bash
-# New feature: include all new and modified files
-fp issue update --files "src/auth/oauth.ts,src/routes/auth.ts,tests/auth.test.ts" FP-2
-
-# Bug fix: usually just 1-2 files
-fp issue update --files "src/utils/validate.ts,tests/validate.test.ts" FP-8
-
-# Refactoring: may include many files
-fp issue update --files "src/models/user.ts,src/models/session.ts,src/auth/session.ts,src/middleware/auth.ts" FP-9
-
-# Config change
-fp issue update --files "wrangler.jsonc,.env.example,README.md" FP-10
 ```
 
 ## Collaborative Planning
@@ -556,18 +492,6 @@ fp issue create --title "Auth middleware" --parent FP-1
 # ... etc
 ```
 
-### ❌ Forgetting hot files
-```bash
-# BAD: No files specified
-fp issue create --title "Add user model" --parent FP-1
-
-# GOOD: Files specified
-fp issue create \
-  --title "Add user model" \
-  --parent FP-1 \
-  --files "src/models/user.ts,drizzle/schema.ts,tests/user.test.ts"
-```
-
 ## Quick Reference
 
 ### Planning Checklist
@@ -575,7 +499,6 @@ fp issue create \
 - [ ] Break down into atomic subissues with `--parent` (1-3 hours each)
 - [ ] **Never use `- [ ]` task lists** - always create proper subissues
 - [ ] Specify dependencies between tasks
-- [ ] Identify hot files for each task
 - [ ] Write clear descriptions (what, why, how, done)
 - [ ] Include testing and documentation tasks
 - [ ] Visualize with `fp tree` to verify structure
@@ -586,7 +509,6 @@ fp issue create \
   --title "[Clear, specific title]" \
   --parent "[Parent issue ID]" \
   --depends "[Comma-separated dependency IDs]" \
-  --files "[Comma-separated file paths]" \
   --description "
 What: [What needs to be done]
 Why: [Context or rationale]
@@ -610,7 +532,6 @@ Planning and workflow are two sides of the same process:
 Use this skill to:
 - Create issue hierarchy
 - Model dependencies
-- Identify hot files
 - Write clear descriptions
 
 ### Execution Phase
@@ -628,7 +549,7 @@ During execution, update the plan:
 fp issue update --depends "FP-2,FP-4,FP-8" FP-5
 fp comment FP-5 "Added dependency on FP-8: need shared utility functions"
 
-# Realized task is too big
+# Task is too big - break it down
 fp issue create --title "Subtask A" --parent FP-5
 fp issue create --title "Subtask B" --parent FP-5
 fp comment FP-5 "Broke down into FP-15, FP-16"
@@ -641,16 +562,15 @@ Effective planning with FP:
 1. **Start with the goal** - Create a parent issue with clear objectives
 2. **Decompose hierarchically** - Break into manageable tasks
 3. **Model dependencies** - Make execution order explicit
-4. **Identify hot files** - Help agents load context quickly
-5. **Write clear descriptions** - What, why, how, and done
-6. **Include testing and docs** - Plan for quality and knowledge sharing
-7. **Iterate as you learn** - Update the plan based on implementation discoveries
-8. **Visualize with `fp tree`** - Verify structure and dependencies
+4. **Write clear descriptions** - What, why, how, and done
+5. **Include testing and docs** - Plan for quality and knowledge sharing
+6. **Iterate as you learn** - Update the plan based on implementation discoveries
+7. **Visualize with `fp tree`** - Verify structure and dependencies
 
 A good plan enables agents to:
 - Understand the full scope
 - Pick up work autonomously
-- Work in parallel without conflicts
+- Work in parallel
 - Track progress objectively
 - Hand off seamlessly
 
