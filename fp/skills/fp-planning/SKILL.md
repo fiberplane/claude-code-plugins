@@ -17,7 +17,7 @@ A plan is an issue that:
 - Has a comprehensive description (the plan document)
 - Has child issues (the tasks/sub-tasks)
 - May have dependencies between children
-- Starts with status "open" and transitions to "done" when all children are done
+- Starts with status "todo" and transitions to "done" when all children are done
 
 ### Issue Hierarchy
 
@@ -187,15 +187,15 @@ fp tree
 
 You should see:
 ```
-FP-1 [open] Add user authentication system
-├── FP-2 [open] Design and implement data models
-├── FP-3 [open] Implement GitHub OAuth flow
+FP-1 [todo] Add user authentication system
+├── FP-2 [todo] Design and implement data models
+├── FP-3 [todo] Implement GitHub OAuth flow
 │   └── blocked by: FP-2
-├── FP-4 [open] Implement session management
+├── FP-4 [todo] Implement session management
 │   └── blocked by: FP-2, FP-3
-├── FP-5 [open] Add login UI components
+├── FP-5 [todo] Add login UI components
 │   └── blocked by: FP-4
-└── FP-6 [open] Testing and documentation
+└── FP-6 [todo] Testing and documentation
     └── blocked by: FP-4, FP-5
 ```
 

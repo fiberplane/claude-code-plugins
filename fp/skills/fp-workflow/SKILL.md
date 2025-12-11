@@ -11,15 +11,16 @@ description: This skill should be used when the user asks to "start working on i
 
 ### Issue Status Lifecycle
 
-Issues have two states:
-1. **open** - Work in progress (actively being worked on)
-2. **done** - Completed
+Issues have three states:
+1. **todo** - Planned, not yet started (no VCS tracking)
+2. **in-progress** - Actively being worked on (VCS base captured)
+3. **done** - Completed (VCS tip captured)
 
 ### VCS-Based Change Tracking
 
 FP automatically tracks changes using your version control system (git or jj):
 
-- **When issue becomes `open`**: Captures current VCS ref as the `base` commit
+- **When issue becomes `in-progress`**: Captures current VCS ref as the `base` commit
 - **When issue becomes `done`**: Captures current VCS ref as the `tip` commit
 - **Range (base..tip)**: Shows exactly what changed for this issue
 
@@ -29,8 +30,8 @@ This replaces manual snapshots - VCS handles all change tracking automatically.
 
 ```
 1. Session Start → Get your agent name
-2. Find Work → Discover next actionable task
-3. Claim Work → Mark issue as open (captures base ref)
+2. Find Work → Discover next actionable task (status: todo)
+3. Claim Work → Mark issue as in-progress (captures base ref)
 4. Do Work → Implement, test, iterate
 5. View Changes → Use fp issue diff/files to see progress
 6. Log Progress → Add comments as you go
@@ -63,15 +64,12 @@ fp tree
 
 This shows all issues with their hierarchy, status, and dependencies.
 
-**List open tasks:**
+**List tasks by status:**
 ```bash
-fp issue list --status open
-```
-
-**List available tasks:**
-```bash
-fp issue list --status done  # Completed work
-fp issue list                 # All issues
+fp issue list --status todo         # Available to pick up
+fp issue list --status in-progress  # Currently being worked on
+fp issue list --status done         # Completed work
+fp issue list                       # All issues
 ```
 
 **Analyze dependencies:**
@@ -84,10 +82,10 @@ When looking at the tree output, identify tasks that:
 
 **Start working on an issue:**
 ```bash
-fp issue update --status open FP-2
+fp issue update --status in-progress FP-2
 ```
 
-When you mark an issue as `open`, the system automatically:
+When you mark an issue as `in-progress`, the system automatically:
 - Captures the current VCS ref as the base commit
 - Sets this as your current issue in the workspace
 
@@ -147,9 +145,10 @@ This automatically captures the current VCS ref as the tip commit.
    fp tree
    ```
 
-4. **Look for open work:**
+4. **Look for available work:**
    ```bash
-   fp issue list --status open
+   fp issue list --status todo         # Not started
+   fp issue list --status in-progress  # In progress (maybe continue)
    ```
 
 5. **If continuing work, load context:**
@@ -173,7 +172,8 @@ This automatically captures the current VCS ref as the tip commit.
    ```
 
 3. **Keep status current**:
-   - `open` when actively working
+   - `todo` when not yet started
+   - `in-progress` when actively working
    - `done` when complete
 
 ### Ending a Session
@@ -185,7 +185,7 @@ This automatically captures the current VCS ref as the tip commit.
 
 2. **Update status appropriately:**
    - If done: `--status done`
-   - If partially done: keep as `open` with clear comment about state
+   - If partially done: keep as `in-progress` with clear comment about state
 
 3. **Don't leave issues in limbo** - Always leave a comment explaining state
 
@@ -194,8 +194,8 @@ This automatically captures the current VCS ref as the tip commit.
 ### Pattern: Pick Up Where You Left Off
 
 ```bash
-# 1. Check what's currently open
-fp issue list --status open
+# 1. Check what's currently in progress
+fp issue list --status in-progress
 
 # 2. Load context for the issue
 fp context FP-5
@@ -243,7 +243,7 @@ fp issue create --title "Token refresh logic" --parent FP-4
 fp comment FP-4 "Broke down into sub-tasks: FP-10, FP-11, FP-12. Will work on these sequentially."
 
 # 3. Work on sub-issues
-fp issue update --status open FP-10
+fp issue update --status in-progress FP-10
 ```
 
 ### Pattern: Checking Parent Issue Progress
@@ -272,7 +272,7 @@ fp comment FP-2 "All tests passing"
 ### ❌ Leaving work in ambiguous state
 ```bash
 # BAD: End session without final comment
-fp issue update --status open FP-2  # Still open, but what's the state?
+fp issue update --status in-progress FP-2  # Still in progress, but what's the state?
 
 # GOOD: Clear handoff
 fp comment FP-2 "End of session. Completed auth middleware. TODO: Add rate limiting. File: src/middleware/auth.ts is 80% done."
@@ -365,13 +365,14 @@ Use this to:
 - [ ] `fp agent whoami` - Know who you are
 - [ ] `fp tree` - See the full picture
 - [ ] `fp log --limit 10` - Check recent activity
-- [ ] `fp issue list --status open` - See current work
+- [ ] `fp issue list --status todo` - See available work
+- [ ] `fp issue list --status in-progress` - See current work
 
 ### During Work Checklist
-- [ ] Mark issue as `open` to start tracking
+- [ ] Mark issue as `in-progress` to start tracking
 - [ ] Comment when starting, at milestones, when done
 - [ ] Use `fp issue diff/files` to see progress
-- [ ] Keep status current (open → done)
+- [ ] Keep status current (todo → in-progress → done)
 
 ### End Session Checklist
 - [ ] Add final comment with progress and next steps
@@ -383,8 +384,9 @@ Use this to:
 
 ### "I don't know what to work on"
 ```bash
-fp tree                      # See full picture
-fp issue list --status open  # See active work
+fp tree                           # See full picture
+fp issue list --status todo       # See available work
+fp issue list --status in-progress  # See active work
 # Pick tasks with no dependencies or all dependencies done
 ```
 
@@ -408,8 +410,8 @@ fp issue files FP-X          # List of changed files
 The FP workflow is designed for seamless agent collaboration:
 
 1. **Always identify yourself** with `fp agent whoami`
-2. **Find actionable work** using `fp tree` and dependency analysis
-3. **Claim with status open** to start VCS tracking
+2. **Find actionable work** using `fp tree` and `fp issue list --status todo`
+3. **Claim with status in-progress** to start VCS tracking
 4. **View changes** with `fp issue diff` and `fp issue files`
 5. **Log progress frequently** with comments
 6. **Mark done** when complete (captures final commit ref)

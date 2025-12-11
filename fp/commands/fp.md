@@ -44,21 +44,22 @@ FP_AGENT_NAME=$(fp agent whoami 2>&1 | grep "Name:" | awk '{print $2}')
 Then run these commands to load context:
 
 ```bash
-fp tree                              # Show issue hierarchy
-fp context --current --format compact # Current work (if any)
-fp issue list --status open          # Active tasks
-fp issue list --status done          # Completed tasks
+fp tree                                  # Show issue hierarchy
+fp context --current --format compact    # Current work (if any)
+fp issue list --status todo              # Available tasks
+fp issue list --status in-progress       # Active tasks
+fp issue list --status done              # Completed tasks
 ```
 
 Then **use AskUserQuestion** to ask the user what they want to do:
-- Present the open tasks as options (use the issue IDs and titles from the commands above)
-- Include "Continue current work" (if there's open work)
+- Present the todo tasks as options (use the issue IDs and titles from the commands above)
+- Include "Continue current work" (if there's in-progress work)
 - Include "Create a new task"
 - Include "Plan new work" (for breaking down a feature/project into tasks)
 
 **Based on selection**:
    - **Continue current work**: Load full context with `fp context --current`
-   - **Pick a task**: Mark it open with `fp issue update --status open <id>`, then load context with `fp context <id>`
+   - **Pick a task**: Mark it in-progress with `fp issue update --status in-progress <id>`, then load context with `fp context <id>`
    - **Create new task**: Use AskUserQuestion to gather title/description, then `fp issue create`
    - **Plan new work**: Invoke the `fp-planning` skill to help break down the work into a hierarchy of issues
 
