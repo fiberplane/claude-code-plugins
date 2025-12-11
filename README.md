@@ -1,19 +1,14 @@
 # Fiberplane Claude Code Plugins
 
-A collection of plugins for [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
+Plugins for [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
 
 ## Installation
 
-In Claude Code, add this marketplace:
+Add the marketplace and install the plugin:
 
 ```
 /plugin marketplace add fiberplane/claude-code-plugins
-```
-
-Then install the plugin:
-
-```
-/plugin install linear-agent@fiberplane-claude-code-plugins
+/plugin install fp@fiberplane-claude-code-plugins
 ```
 
 Or configure via `~/.claude/settings.json`:
@@ -29,33 +24,33 @@ Or configure via `~/.claude/settings.json`:
     }
   },
   "enabledPlugins": {
-    "linear-agent@fiberplane-claude-code-plugins": true
+    "fp@fiberplane-claude-code-plugins": true
   }
 }
 ```
 
 ## Available Plugins
 
-### fp-agent
+### fp
 
-Local-first project management for AI agents using the `fp` CLI. All data stored as git-friendly markdown files.
+Local-first issue tracking and code review for humans and AI agents.
 
-**Features:**
-- Track issues and plans in `.fp/` directory (markdown + YAML frontmatter)
-- Auto-register agent identity across sessions
-- Model task dependencies and hot files
-- Preserve context across session compaction
+- Git-friendly markdown files in `.fp/`
+- VCS-integrated change tracking via git/jj commit ranges
+- Auto-registers agent identity across sessions
+- Task dependencies and blocked work tracking
 
 **Usage:** `/fp`
 
-**Prerequisites:** Install the `fp` CLI from [fiberplane/nocturne](https://github.com/fiberplane/nocturne/tree/main/apps/fp)
+**Prerequisites:**
+```bash
+curl -fsSL https://setup.fiberplane.com/install.sh | sh -s
+```
 
-[Full documentation](./fp-agent/README.md)
+[Full documentation](./fp/README.md)
 
 ## Development
 
-To test a plugin locally:
-
 ```bash
-claude plugin install ./fp-agent
+claude plugin install ./fp
 ```
