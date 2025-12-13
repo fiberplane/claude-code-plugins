@@ -33,11 +33,22 @@ This replaces manual snapshots - VCS handles all change tracking automatically.
 2. Find Work → Discover next actionable task (status: todo)
 3. Claim Work → Mark issue as in-progress (captures base ref)
 4. Do Work → Implement, test, iterate
-5. View Changes → Use fp issue diff/files to see progress
-6. Log Progress → Add comments as you go
+5. COMMIT → Commit changes before logging (enforced by hooks)
+6. Log Progress → Add comments after committing
 7. Complete → Mark as done (captures tip ref)
 8. Hand Off → Log final status before session ends
 ```
+
+### Commit-First Rule
+
+**You must commit before logging progress.** The plugin enforces this with PreToolUse hooks that block `fp comment` and `fp issue update` calls when uncommitted changes exist.
+
+The workflow rhythm is: **code → commit → log → repeat**
+
+This ensures:
+- VCS history accurately reflects progress
+- Comments reference committed work, not in-flight changes
+- Context survives compaction (commits are durable)
 
 ## Essential Commands
 
@@ -256,17 +267,29 @@ fp issue files FP-1         # Lists all files changed by descendants
 
 ## Anti-Patterns (Avoid These)
 
+### ❌ Logging before committing
+```bash
+# BAD: Log progress with uncommitted changes (will be blocked by hooks)
+# ... make changes ...
+fp comment FP-2 "Added auth middleware"  # BLOCKED - uncommitted changes
+
+# GOOD: Commit first, then log
+# ... make changes ...
+jj describe -m "Add auth middleware" && jj new  # or: git commit -am "..."
+fp comment FP-2 "Committed: Added auth middleware"  # ALLOWED
+```
+
 ### ❌ Silent progress (no comments)
 ```bash
 # BAD: Work on issue for 2 hours without any comments
 # Context is lost if session compacts
 
-# GOOD: Comment at key milestones
-fp comment FP-2 "Created base models"
+# GOOD: Commit and comment at key milestones
+jj describe -m "Create base models" && jj new
+fp comment FP-2 "Committed: Created base models"
 # ... work ...
-fp comment FP-2 "Added validation logic"
-# ... work ...
-fp comment FP-2 "All tests passing"
+jj describe -m "Add validation logic" && jj new
+fp comment FP-2 "Committed: Added validation logic"
 ```
 
 ### ❌ Leaving work in ambiguous state
@@ -370,7 +393,8 @@ Use this to:
 
 ### During Work Checklist
 - [ ] Mark issue as `in-progress` to start tracking
-- [ ] Comment when starting, at milestones, when done
+- [ ] **Commit before logging** (hooks enforce this)
+- [ ] Comment after each commit to document progress
 - [ ] Use `fp issue diff/files` to see progress
 - [ ] Keep status current (todo → in-progress → done)
 
@@ -412,9 +436,9 @@ The FP workflow is designed for seamless agent collaboration:
 1. **Always identify yourself** with `fp agent whoami`
 2. **Find actionable work** using `fp tree` and `fp issue list --status todo`
 3. **Claim with status in-progress** to start VCS tracking
-4. **View changes** with `fp issue diff` and `fp issue files`
-5. **Log progress frequently** with comments
+4. **Code → Commit → Log** (commit-first is enforced by hooks)
+5. **View changes** with `fp issue diff` and `fp issue files`
 6. **Mark done** when complete (captures final commit ref)
 7. **Hand off cleanly** with clear final comments
 
-VCS integration means you never need to manually track what changed - fp handles it automatically based on your git/jj commits.
+The commit-first rule ensures VCS history accurately reflects progress and comments reference durable, committed work.

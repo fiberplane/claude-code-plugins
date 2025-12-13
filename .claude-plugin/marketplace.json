@@ -11,7 +11,7 @@
 		{
 			"name": "fp",
 			"description": "Local-first issue tracking and code review for humans and AI agents.",
-			"version": "0.8.1",
+			"version": "0.9.2",
 			"author": {
 				"name": "Fiberplane",
 				"email": "support@fiberplane.com"

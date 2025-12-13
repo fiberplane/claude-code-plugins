@@ -97,6 +97,34 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash(fp comment:*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'if jj root &>/dev/null; then changes=$(jj diff --stat 2>/dev/null | head -5); elif git rev-parse --git-dir &>/dev/null; then changes=$(git status --porcelain 2>/dev/null | head -5); fi; if [ -n \"$changes\" ]; then echo \"=== UNCOMMITTED CHANGES ===\"; echo \"$changes\"; echo \"\"; echo \"You have uncommitted changes. Commit BEFORE logging progress.\"; fi'"
+          },
+          {
+            "type": "prompt",
+            "prompt": "You are about to log progress with `fp comment`. Check the output above.\n\nIf there are uncommitted changes shown:\n1. Return 'block'\n2. Commit your changes first (`jj describe -m \"...\" && jj new` or `git commit`)\n3. Then retry the fp comment\n\nIf no uncommitted changes were shown, return 'approve'."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(fp issue update:*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'if jj root &>/dev/null; then changes=$(jj diff --stat 2>/dev/null | head -5); elif git rev-parse --git-dir &>/dev/null; then changes=$(git status --porcelain 2>/dev/null | head -5); fi; if [ -n \"$changes\" ]; then echo \"=== UNCOMMITTED CHANGES ===\"; echo \"$changes\"; echo \"\"; echo \"You have uncommitted changes. Commit BEFORE updating issue status.\"; fi'"
+          },
+          {
+            "type": "prompt",
+            "prompt": "You are about to update issue status. Check the output above.\n\nIf there are uncommitted changes shown:\n1. Return 'block'\n2. Commit your changes first (`jj describe -m \"...\" && jj new` or `git commit`)\n3. Then retry the fp issue update\n\nIf no uncommitted changes were shown, return 'approve'."
+          }
+        ]
+      }
     ]
   }
 }
