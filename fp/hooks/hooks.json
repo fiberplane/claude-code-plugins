@@ -28,7 +28,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/pre-compact.sh"
+            "command": "bash -c 'echo \"=== VCS Status ===\"; jj status 2>/dev/null || git status --short 2>/dev/null; echo \"\"; bash ${CLAUDE_PLUGIN_ROOT}/scripts/pre-compact.sh'"
+          },
+          {
+            "type": "prompt",
+            "prompt": "Context is compacting. Review the VCS status above.\n\nYou MUST complete these steps before returning 'approve':\n1. COMMIT: If uncommitted changes exist, commit now (`jj describe -m \"...\" && jj new` or `git commit`)\n2. LOG: If working on an fp issue, run `fp comment <id> \"Progress: ...\"` to preserve context\n\nReturn 'block' if steps remain incomplete. Return 'approve' only after both are done."
           }
         ]
       }
@@ -38,8 +42,12 @@
         "matcher": "*",
         "hooks": [
           {
+            "type": "command",
+            "command": "bash -c 'echo \"=== VCS Status ===\"; jj status 2>/dev/null || git status --short 2>/dev/null'"
+          },
+          {
             "type": "prompt",
-            "prompt": "Before stopping, check if you worked on an fp issue this session. If yes:\n1. Did you log progress with `fp comment <id> \"...\"`? If not, do it now.\n2. Did you make commits for your changes? If not, commit now.\n3. Is the issue done? Update status with `fp issue update --status done <id>`.\n\nReturn 'approve' if all done (or no fp work this session). Return 'block' with what's missing otherwise."
+            "prompt": "Review the VCS status above before stopping.\n\nYou MUST complete these steps:\n1. COMMIT: If uncommitted changes exist, commit now (`jj describe -m \"...\" && jj new` or `git commit`)\n2. LOG: If working on an fp issue, run `fp comment <id> \"Summary: ...\"` with what was done\n3. STATUS: If issue is complete, run `fp issue update --status done <id>`\n\nReturn 'block' and complete these steps first. Return 'approve' ONLY when all done (or no code changes this session)."
           }
         ]
       }
@@ -49,8 +57,43 @@
         "matcher": "*",
         "hooks": [
           {
+            "type": "command",
+            "command": "bash -c 'jj status 2>/dev/null || git status --short 2>/dev/null'"
+          },
+          {
             "type": "prompt",
-            "prompt": "Before this subagent stops: If it made code changes for an fp issue, ensure progress was logged with `fp comment <id> \"...\"` summarizing what was done. Return 'approve' if logged or no fp work, 'block' with reminder otherwise."
+            "prompt": "Subagent finishing. If you made code changes:\n1. COMMIT: Uncommitted changes? Commit now (`jj describe -m \"...\" && jj new` or `git commit`)\n2. LOG: Working on fp issue? Run `fp comment <id> \"Implemented: ...\"` summarizing changes\n\nReturn 'block' until done. Return 'approve' after completing or if no code changes."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash(jj describe:*)",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You committed changes. If working on an fp issue, log this with `fp comment <id> \"Committed: [brief summary]\"`. Return 'approve'."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(git commit:*)",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You committed changes. If working on an fp issue, log this with `fp comment <id> \"Committed: [brief summary]\"`. Return 'approve'."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "User submitted a request. If this is a new task, feature, or bug fix that doesn't have an fp issue yet, consider creating one with `fp issue create --title \"...\"` before starting work. Return 'approve'."
           }
         ]
       }
