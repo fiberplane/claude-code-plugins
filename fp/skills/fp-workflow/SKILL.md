@@ -16,6 +16,13 @@ Issues have three states:
 2. **in-progress** - Actively being worked on (VCS base captured)
 3. **done** - Completed (VCS tip captured)
 
+### Issue Priority
+
+Issues can have an optional priority: `low`, `medium`, `high`, or `critical`.
+- Priority affects display order: within the same status, higher priority issues appear first
+- Sort order: critical → high → medium → low → (no priority)
+- Use `--priority` flag when creating or updating issues
+
 ### VCS-Based Change Tracking
 
 FP automatically tracks changes using your version control system (git or jj):
@@ -120,14 +127,27 @@ fp issue files FP-2
 
 For parent issues with children, these commands automatically aggregate changes from all descendants.
 
-### 5. Log Progress
+### 5. Manually Assign Commits
+
+If automatic VCS tracking missed commits (e.g., you forgot to mark the issue as in-progress before starting work), use `fp issue assign` to retroactively link commits:
+
+```bash
+fp issue assign FP-2              # Assign current HEAD to issue
+fp issue assign FP-2 --rev abc123 # Assign specific commit
+fp issue assign FP-2 --rev a1,b2  # Assign multiple commits
+fp issue assign FP-2 --reset      # Clear all assigned revisions
+```
+
+This adds an `Issue: FP-2` trailer to the commit message and updates the issue's revision tracking.
+
+### 6. Log Progress
 
 **Add comments as you make progress:**
 ```bash
 fp comment FP-2 "Completed schema design. Added User, Session, Token models to src/models/"
 ```
 
-### 6. Mark Completion
+### 7. Mark Completion
 
 **When work is done:**
 ```bash
@@ -263,6 +283,21 @@ fp issue update --status in-progress FP-10
 # For a parent issue, see aggregated changes from all children
 fp issue diff FP-1 --stat   # Shows all changes across descendants
 fp issue files FP-1         # Lists all files changed by descendants
+```
+
+### Pattern: Fixing Tracking After the Fact
+
+If you made commits before marking an issue as in-progress (so the base ref wasn't captured), use `fp issue assign` to manually link commits:
+
+```bash
+# 1. Find the commits you made for this issue
+jj log   # or: git log --oneline
+
+# 2. Assign them to the issue
+fp issue assign FP-5 --rev abc123,def456
+
+# 3. Verify the issue now tracks those commits
+fp issue diff FP-5 --stat
 ```
 
 ## Anti-Patterns (Avoid These)

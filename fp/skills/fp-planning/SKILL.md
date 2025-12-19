@@ -509,6 +509,7 @@ fp issue create \
   --title "[Clear, specific title]" \
   --parent "[Parent issue ID]" \
   --depends "[Comma-separated dependency IDs]" \
+  --priority "[low|medium|high|critical]" \
   --description "
 What: [What needs to be done]
 Why: [Context or rationale]
@@ -516,6 +517,12 @@ How: [Technical approach]
 Done: [Definition of done]
 "
 ```
+
+Priority is optional. Use it to indicate urgency:
+- `critical` - Blocking other work or urgent fix
+- `high` - Important, should be done soon
+- `medium` - Normal priority
+- `low` - Nice to have, can wait
 
 ### Dependency Analysis Questions
 1. Does this task need data structures from another task?

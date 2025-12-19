@@ -70,8 +70,10 @@ Then **use AskUserQuestion** to ask the user what they want to do:
 Once working on a task:
 - `fp comment <id> "message"` - Log progress (do this frequently!)
 - `fp issue update --status done <id>` - Mark complete
+- `fp issue update --priority high <id>` - Set priority (low/medium/high/critical)
 - `fp issue diff <id>` - See changes since task started
 - `fp issue files <id>` - List changed files
+- `fp issue assign <id>` - Assign current commit to issue (for manual commit tracking)
 - `fp context <id>` - Reload issue context
 
 See `fp-workflow` and `fp-planning` skills for detailed patterns.
