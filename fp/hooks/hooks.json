@@ -1,130 +1,35 @@
 {
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/session-start.sh"
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/session-end.sh"
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'echo \"=== VCS Status ===\"; jj status 2>/dev/null || git status --short 2>/dev/null; echo \"\"; bash ${CLAUDE_PLUGIN_ROOT}/scripts/pre-compact.sh'"
-          },
-          {
-            "type": "prompt",
-            "prompt": "Context is compacting. Review the VCS status above.\n\nYou MUST complete these steps before returning 'approve':\n1. COMMIT: If uncommitted changes exist, commit now (`jj describe -m \"...\" && jj new` or `git commit`)\n2. LOG: If working on an fp issue, run `fp comment <id> \"Progress: ...\"` to preserve context\n\nReturn 'block' if steps remain incomplete. Return 'approve' only after both are done."
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'echo \"=== VCS Status ===\"; jj status 2>/dev/null || git status --short 2>/dev/null'"
-          },
-          {
-            "type": "prompt",
-            "prompt": "Review the VCS status above before stopping.\n\nYou MUST complete these steps:\n1. COMMIT: If uncommitted changes exist, commit now (`jj describe -m \"...\" && jj new` or `git commit`)\n2. LOG: If working on an fp issue, run `fp comment <id> \"Summary: ...\"` with what was done\n3. STATUS: If issue is complete, run `fp issue update --status done <id>`\n\nReturn 'block' and complete these steps first. Return 'approve' ONLY when all done (or no code changes this session)."
-          }
-        ]
-      }
-    ],
-    "SubagentStop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'jj status 2>/dev/null || git status --short 2>/dev/null'"
-          },
-          {
-            "type": "prompt",
-            "prompt": "Subagent finishing. If you made code changes:\n1. COMMIT: Uncommitted changes? Commit now (`jj describe -m \"...\" && jj new` or `git commit`)\n2. LOG: Working on fp issue? Run `fp comment <id> \"Implemented: ...\"` summarizing changes\n\nReturn 'block' until done. Return 'approve' after completing or if no code changes."
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Bash(jj describe:*)",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "You committed changes. If working on an fp issue, log this with `fp comment <id> \"Committed: [brief summary]\"`. Return 'approve'."
-          }
-        ]
-      },
-      {
-        "matcher": "Bash(git commit:*)",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "You committed changes. If working on an fp issue, log this with `fp comment <id> \"Committed: [brief summary]\"`. Return 'approve'."
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "User submitted a request. If this is a new task, feature, or bug fix that doesn't have an fp issue yet, consider creating one with `fp issue create --title \"...\"` before starting work. Return 'approve'."
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Bash(fp comment:*)",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'if jj root &>/dev/null; then changes=$(jj diff --stat 2>/dev/null | head -5); elif git rev-parse --git-dir &>/dev/null; then changes=$(git status --porcelain 2>/dev/null | head -5); fi; if [ -n \"$changes\" ]; then echo \"=== UNCOMMITTED CHANGES ===\"; echo \"$changes\"; echo \"\"; echo \"You have uncommitted changes. Commit BEFORE logging progress.\"; fi'"
-          },
-          {
-            "type": "prompt",
-            "prompt": "You are about to log progress with `fp comment`. Check the output above.\n\nIf there are uncommitted changes shown:\n1. Return 'block'\n2. Commit your changes first (`jj describe -m \"...\" && jj new` or `git commit`)\n3. Then retry the fp comment\n\nIf no uncommitted changes were shown, return 'approve'."
-          }
-        ]
-      },
-      {
-        "matcher": "Bash(fp issue update:*)",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'if jj root &>/dev/null; then changes=$(jj diff --stat 2>/dev/null | head -5); elif git rev-parse --git-dir &>/dev/null; then changes=$(git status --porcelain 2>/dev/null | head -5); fi; if [ -n \"$changes\" ]; then echo \"=== UNCOMMITTED CHANGES ===\"; echo \"$changes\"; echo \"\"; echo \"You have uncommitted changes. Commit BEFORE updating issue status.\"; fi'"
-          },
-          {
-            "type": "prompt",
-            "prompt": "You are about to update issue status. Check the output above.\n\nIf there are uncommitted changes shown:\n1. Return 'block'\n2. Commit your changes first (`jj describe -m \"...\" && jj new` or `git commit`)\n3. Then retry the fp issue update\n\nIf no uncommitted changes were shown, return 'approve'."
-          }
-        ]
-      }
-    ]
-  }
+	"hooks": {
+		"PostToolUse": [
+			{
+				"matcher": "Bash(jj describe:*)",
+				"hooks": [
+					{
+						"type": "prompt",
+						"prompt": "You committed changes. If working on an fp issue, log this with `fp comment <id> \"Committed: [brief summary]\"`. Return 'approve'."
+					}
+				]
+			},
+			{
+				"matcher": "Bash(git commit:*)",
+				"hooks": [
+					{
+						"type": "prompt",
+						"prompt": "You committed changes. If working on an fp issue, log this with `fp comment <id> \"Committed: [brief summary]\"`. Return 'approve'."
+					}
+				]
+			}
+		],
+		"UserPromptSubmit": [
+			{
+				"matcher": "*",
+				"hooks": [
+					{
+						"type": "prompt",
+						"prompt": "User submitted a request. If this is a new task, feature, or bug fix that doesn't have an fp issue yet, consider creating one with `fp issue create --title \"...\"` before starting work. Return 'approve'."
+					}
+				]
+			}
+		]
+	}
 }
