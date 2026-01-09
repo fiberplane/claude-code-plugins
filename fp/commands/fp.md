@@ -36,11 +36,6 @@ If yes, run `fp init` and then proceed to Path C.
 
 ### Path C: Ready to work (fp installed + project initialized)
 
-First, ensure you have your agent name. If `$FP_AGENT_NAME` is not set (e.g., in subagents), get it:
-```bash
-FP_AGENT_NAME=$(fp agent whoami 2>&1 | grep "Name:" | awk '{print $2}')
-```
-
 Then run these commands to load context:
 
 ```bash
