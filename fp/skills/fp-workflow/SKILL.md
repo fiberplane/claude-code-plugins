@@ -138,7 +138,7 @@ fp issue assign FP-2 --rev a1,b2  # Assign multiple commits
 fp issue assign FP-2 --reset      # Clear all assigned revisions
 ```
 
-This adds an `Issue: FP-2` trailer to the commit message and updates the issue's revision tracking.
+This updates the issue's revision tracking metadata.
 
 ### 6. Log Progress
 
@@ -437,6 +437,7 @@ Use this to:
 - [ ] Add final comment with progress and next steps
 - [ ] Update status appropriately
 - [ ] Ensure all changes are logged
+- [ ] **Run review** - Use `fp-review` skill to assign commits to issues
 - [ ] Don't leave work in ambiguous state
 
 ## Troubleshooting

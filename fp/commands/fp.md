@@ -51,12 +51,14 @@ Then **use AskUserQuestion** to ask the user what they want to do:
 - Include "Continue current work" (if there's in-progress work)
 - Include "Create a new task"
 - Include "Plan new work" (for breaking down a feature/project into tasks)
+- Include "Review commits" (to assign commits to the correct issues)
 
 **Based on selection**:
    - **Continue current work**: Load full context with `fp context --current`
    - **Pick a task**: Mark it in-progress with `fp issue update --status in-progress <id>`, then load context with `fp context <id>`
    - **Create new task**: Use AskUserQuestion to gather title/description, then `fp issue create`
    - **Plan new work**: Invoke the `fp-planning` skill to help break down the work into a hierarchy of issues
+   - **Review commits**: Use the `fp-review` skill to analyze recent commits and assign them to issues
 
 **After task is selected**, use TodoWrite to create a todo list based on the issue description.
 
@@ -70,5 +72,9 @@ Once working on a task:
 - `fp issue files <id>` - List changed files
 - `fp issue assign <id>` - Assign current commit to issue (for manual commit tracking)
 - `fp context <id>` - Reload issue context
+- Suggest user run `fp review` to open web UI for reviewing uncommitted changes
 
-See `fp-workflow` and `fp-planning` skills for detailed patterns.
+End of session:
+- Use the `fp-review` skill to assign commits to correct issues
+
+See `fp-workflow`, `fp-planning`, and `fp-review` skills for detailed patterns.
