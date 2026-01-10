@@ -26,7 +26,7 @@
 				"hooks": [
 					{
 						"type": "prompt",
-						"prompt": "User submitted a request. If this is a new task, feature, or bug fix that doesn't have an fp issue yet, consider creating one with `fp issue create --title \"...\"` before starting work. Return 'approve'."
+						"prompt": "User submitted a request. If this is a new task, feature, or bug fix that doesn't have an fp issue yet, consider creating one with `fp issue create --title <title>` before starting work. Return 'approve'."
 					}
 				]
 			}
