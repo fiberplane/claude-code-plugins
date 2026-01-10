@@ -41,12 +41,6 @@ fp issue update --status done MYPROJ-2   # Complete (captures tip commit)
 
 ## Plugin Features
 
-### Hooks
-
-- **SessionStart**: Registers agent identity, loads current work context
-- **SessionEnd**: Ends agent session gracefully
-- **PreCompact**: Preserves context before window fills
-
 ### Skills
 
 - **fp-workflow**: Work session patterns (find work, claim tasks, log progress)
