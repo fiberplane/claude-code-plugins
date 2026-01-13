@@ -15,7 +15,7 @@ fp-agent provides structured issue tracking and context management that's:
 
 Install the `fp` CLI:
 ```bash
-curl -fsSL https://setup.fiberplane.com/install.sh | sh -s
+curl -fsSL https://setup.fp.dev/install.sh | sh -s
 ```
 
 ## Usage
@@ -27,16 +27,21 @@ fp init --prefix MYPROJ
 
 2. Create issues and plans:
 ```bash
-fp issue create --title "Add feature X"
-fp issue create --title "Implement data layer" --parent MYPROJ-1
+fp issue create --title "Add feature X" 
+# creates issue MYPROJ-aqfx
+
+# then, use minimal unique prefix to reference the issue:
+fp issue create --title "Implement data layer" --parent MYPROJ-a
 ```
 
-3. Track work:
+3. Review Claude's work:
 ```bash
-fp issue update --status open MYPROJ-2   # Starts tracking (captures base commit)
-fp comment MYPROJ-2 "Started implementation..."
-fp issue diff MYPROJ-2                   # See changes since started
-fp issue update --status done MYPROJ-2   # Complete (captures tip commit)
+# open a local review UI for working copy
+# comments get printed to stdout
+fp review 
+
+# open the review UI for a specific issue's revisions
+fp review MYPROJ-a
 ```
 
 ## Plugin Features
@@ -48,23 +53,19 @@ fp issue update --status done MYPROJ-2   # Complete (captures tip commit)
 
 ### Commands
 
-- `/fp`: Interactive task picker and context loader
+- `/fp:fp`: Interactive task picker and context loader
 
 ## Data Storage
 
 ```
 # Per-project
 .fp/
-├── workspace.toml   # Current issue (local state)
-├── activity.jsonl   # Activity log
-└── issues/          # Issue markdown files
-    ├── PROJ-1.md
-    └── PROJ-2.md
+├── config.toml   # Project identifier and issue prefix 
 
 # Global
 ~/.fiberplane/
-├── agents.toml      # Agent identities (cross-project)
-└── projects.toml    # Project registry
+├── projects/      # Per-project files for issues, comments, etc
+└── projects.toml  # Project registry
 ```
 
 The CLI auto-discovers `.fp/` directories from parent/child paths.
