@@ -20,7 +20,7 @@ If fp CLI is NOT installed, inform the user:
 
 > The `fp` CLI is not installed. To install it:
 > ```bash
-> curl -fsSL https://setup.fiberplane.com/install.sh | sh -s
+> curl -fsSL https://setup.fp.dev/install.sh | sh -s
 > ```
 > After installation, run `/fp` again.
 
