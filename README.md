@@ -44,7 +44,7 @@ Local-first issue tracking and code review for humans and AI agents.
 
 **Prerequisites:**
 ```bash
-curl -fsSL https://setup.fiberplane.com/install.sh | sh -s
+curl -fsSL https://setup.fp.dev/install.sh | sh -s
 ```
 
 [Full documentation](./fp/README.md)
