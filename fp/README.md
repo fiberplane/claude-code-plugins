@@ -34,7 +34,15 @@ fp issue create --title "Add feature X"
 fp issue create --title "Implement data layer" --parent MYPROJ-a
 ```
 
-3. Review Claude's work:
+3. Track work:
+```bash
+fp issue update --status in-progress MYPROJ-a  # Starts tracking (captures base commit)
+fp comment MYPROJ-a "Started implementation..."
+fp issue diff MYPROJ-a                         # See changes since started
+fp issue update --status done MYPROJ-a         # Complete (captures tip commit)
+```
+
+4. Review Claude's work:
 ```bash
 # open a local review UI for working copy
 # comments get printed to stdout
@@ -48,12 +56,9 @@ fp review MYPROJ-a
 
 ### Skills
 
-- **fp-workflow**: Work session patterns (find work, claim tasks, log progress)
-- **fp-planning**: Plan breakdown patterns (create hierarchies, model dependencies)
-
-### Commands
-
-- `/fp:fp`: Interactive task picker and context loader
+- **fp-plan**: Create plans and break them down into trackable issues. Supports importing from GitHub, Linear, and Notion URLs.
+- **fp-execute**: Find, claim, and complete work on issues. Track progress with comments.
+- **fp-review**: Ensure commits are assigned to issues, leave review comments, and use the web UI for interactive review.
 
 ## Data Storage
 

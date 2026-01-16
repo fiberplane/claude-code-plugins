@@ -1,6 +1,6 @@
 {
   "name": "fp",
-  "version": "0.11.2",
+  "version": "0.12.0",
   "description": "Local-first issue tracking and code review for humans and AI agents.",
   "author": {
     "name": "Fiberplane",
@@ -13,6 +13,5 @@
     "workflow",
     "local-first",
     "markdown"
-  ],
-  "commands": "./commands"
+  ]
 }
