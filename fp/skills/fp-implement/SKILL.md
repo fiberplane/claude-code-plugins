@@ -1,9 +1,9 @@
 ---
-name: fp-execute
-description: Execute work on issues. Use when user asks to "start working on issue", "what should I work on", "pick up task", "continue work", or "find next task".
+name: fp-implement
+description: Implement work on issues. Use when user asks to "start working on issue", "what should I work on", "pick up task", "continue work", or "find next task".
 ---
 
-# FP Execute Skill
+# FP Implement Skill
 
 **Find, claim, and complete work on issues.**
 
