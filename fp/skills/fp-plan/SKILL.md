@@ -7,6 +7,36 @@ description: Create and break down plans into trackable issues. Use when user as
 
 **Create plans and break them down into trackable issues.**
 
+## Prerequisites
+
+Before using fp commands, check setup:
+
+```bash
+# Check if fp is installed
+which fp
+```
+
+**If fp is not installed**, tell the user:
+> The `fp` CLI is not installed. Install it with:
+> ```bash
+> curl -fsSL https://setup.fp.dev/install.sh | sh -s
+> ```
+
+```bash
+# Check if project is initialized
+test -d .fp && echo "initialized" || echo "not initialized"
+```
+
+**If project is not initialized**, ask the user if they want to initialize:
+> This project hasn't been initialized with fp. Would you like to initialize it?
+
+If yes:
+```bash
+fp init
+```
+
+---
+
 ## When This Skill Triggers
 
 1. User asks to "create a plan", "break down feature", "design implementation"

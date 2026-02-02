@@ -7,6 +7,36 @@ description: Review code and ensure commits are assigned to issues. Use when use
 
 **Ensure commits are properly linked to issues and provide review feedback.**
 
+## Prerequisites
+
+Before using fp commands, check setup:
+
+```bash
+# Check if fp is installed
+which fp
+```
+
+**If fp is not installed**, tell the user:
+> The `fp` CLI is not installed. Install it with:
+> ```bash
+> curl -fsSL https://setup.fp.dev/install.sh | sh -s
+> ```
+
+```bash
+# Check if project is initialized
+test -d .fp && echo "initialized" || echo "not initialized"
+```
+
+**If project is not initialized**, ask the user if they want to initialize:
+> This project hasn't been initialized with fp. Would you like to initialize it?
+
+If yes:
+```bash
+fp init
+```
+
+---
+
 ## Core Purpose
 
 1. Verify commits are assigned to the correct issues
