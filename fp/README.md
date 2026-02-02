@@ -4,12 +4,11 @@ Local-first project management for AI agents using the fp CLI.
 
 ## Overview
 
-fp-agent provides structured issue tracking and context management that's:
-- **Git-friendly**: All data stored as markdown files in `.fp/`
-- **VCS-integrated**: Automatic change tracking via git/jj commit ranges
-- **Agent-native**: Auto-registers agent identity, preserves context across sessions
-- **Dependency-aware**: Track task dependencies and blocked work
-- **Multi-project aware**: Works from any subdirectory via project registry
+fp provides structured issue tracking that's:
+- **Local-first**: All data stored in `~/.fiberplane/projects/` with config in `.fp/`
+- **Hierarchy-aware**: Parent/child issues with dependency tracking
+- **Review-integrated**: Web UI for reviewing diffs with AI-generated comments
+- **Worktree-friendly**: Works with git worktrees and jj workspaces
 
 ## Prerequisites
 
@@ -30,17 +29,23 @@ fp init --prefix MYPROJ
 fp issue create --title "Add feature X" 
 # creates issue MYPROJ-aqfx
 
-# then, use minimal unique prefix to reference the issue:
+# use minimal unique prefix to reference the issue:
 fp issue create --title "Implement data layer" --parent MYPROJ-a
 ```
 
-3. Review Claude's work:
+3. Track work:
 ```bash
-# open a local review UI for working copy
-# comments get printed to stdout
+fp issue update --status in-progress MYPROJ-a
+fp comment MYPROJ-a "Started implementation..."
+fp issue update --status done MYPROJ-a
+```
+
+4. Review work:
+```bash
+# review working copy (uncommitted changes)
 fp review 
 
-# open the review UI for a specific issue's revisions
+# review a specific issue (requires commits assigned)
 fp review MYPROJ-a
 ```
 
@@ -48,19 +53,16 @@ fp review MYPROJ-a
 
 ### Skills
 
-- **fp-workflow**: Work session patterns (find work, claim tasks, log progress)
-- **fp-planning**: Plan breakdown patterns (create hierarchies, model dependencies)
-
-### Commands
-
-- `/fp:fp`: Interactive task picker and context loader
+- **fp-plan**: Create plans and break them down into trackable issues. Supports importing from GitHub, Linear, and Notion URLs.
+- **fp-execute**: Find, claim, and complete work on issues. Track progress with comments.
+- **fp-review**: Ensure commits are assigned to issues, leave review comments, and use the web UI for interactive review.
 
 ## Data Storage
 
 ```
-# Per-project
+# Per-project (in repo root)
 .fp/
-├── config.toml   # Project identifier and issue prefix 
+└── config.toml   # Project identifier and issue prefix 
 
 # Global
 ~/.fiberplane/

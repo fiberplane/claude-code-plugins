@@ -1,194 +1,253 @@
 ---
-name: FP Review
-description: This skill should be used when the user asks to "review commits", "assign commits to issues", "end session", "wrap up work", "clean up tracking", or "make sure commits are tracked". Provides commit-to-issue assignment workflow for ensuring all work is properly attributed to issues.
+name: fp-review
+description: Review code and ensure commits are assigned to issues. Use when user asks to "review code", "assign commits", "check commits are assigned", or "prepare for review".
 ---
 
 # FP Review Skill
 
-**Commit-to-issue assignment workflow for the FP CLI**
+**Ensure commits are properly linked to issues and provide review feedback.**
 
-## Purpose
+## Prerequisites
 
-At the end of a work session (or when asked to review), ensure that:
-1. All commits made during the session are assigned to the correct issues
-2. Each completed issue has its associated commits tracked
-3. The VCS history accurately reflects which work belonged to which issue
+Before using fp commands, check setup:
 
-## When to Use
+```bash
+# Check if fp is installed
+which fp
+```
 
-- End of a work session
-- When user asks to "review" or "clean up"
-- Before handing off to another agent
-- When multiple issues were worked on and commits need sorting
+**If fp is not installed**, tell the user:
+> The `fp` CLI is not installed. Install it with:
+> ```bash
+> curl -fsSL https://setup.fp.dev/install.sh | sh -s
+> ```
+
+```bash
+# Check if project is initialized
+test -d .fp && echo "initialized" || echo "not initialized"
+```
+
+**If project is not initialized**, ask the user if they want to initialize:
+> This project hasn't been initialized with fp. Would you like to initialize it?
+
+If yes:
+```bash
+fp init
+```
+
+---
+
+## Core Purpose
+
+1. Verify commits are assigned to the correct issues
+2. Leave review comments on issues
+3. Point to the web UI for interactive review
+
+---
+
+## Assigning Commits to Issues
+
+### Check Current Assignments
+
+```bash
+fp issue files <PREFIX>-X
+```
+
+If empty, the issue has no commits assigned.
+
+### Find Relevant Commits
+
+```bash
+jj log --limit 20        # Jujutsu
+git log --oneline -20    # Git
+```
+
+### View Commit Details
+
+```bash
+jj show <commit-id>      # Jujutsu
+git show <hash> --stat   # Git
+```
+
+### Match Commits to Issues
+
+Compare:
+- Files changed in commit vs issue description
+- Commit message content vs issue title
+- Code changes vs issue requirements
+
+### Assign Commits
+
+**Before assigning commits, confirm with the user.** Some users prefer to work without committing until they're done, or may not want commits linked to issues.
+
+Use `AskUserTool` to ask:
+> I found these commits that appear related to `<PREFIX>-X`:
+> - `abc123` - Add user model
+> - `def456` - Implement auth middleware
+>
+> Would you like me to assign them to the issue? (If you prefer to review uncommitted changes instead, you can run `fp review` for the working copy.)
+
+If confirmed:
+
+```bash
+# Single commit
+fp issue assign <PREFIX>-X --rev abc123
+
+# Multiple commits
+fp issue assign <PREFIX>-X --rev abc123,def456,ghi789
+
+# Current HEAD
+fp issue assign <PREFIX>-X
+
+# Reset and reassign
+fp issue assign <PREFIX>-X --reset
+fp issue assign <PREFIX>-X --rev abc123,def456
+```
+
+### Verify Assignment
+
+```bash
+fp issue files <PREFIX>-X
+fp issue diff <PREFIX>-X --stat
+```
+
+---
+
+## Leaving Review Comments
+
+Use `fp comment` for review feedback. Reference files and lines for specificity.
+
+### File-Specific Comments
+
+```bash
+fp comment <PREFIX>-X "**src/utils/parser.ts**: Consider extracting the validation logic into a separate function for testability."
+
+fp comment <PREFIX>-X "**src/api/handler.ts:45-60**: This error handling could swallow important exceptions. Suggest re-throwing after logging."
+```
+
+### Severity Prefixes
+
+Use prefixes to indicate importance:
+
+```bash
+fp comment <PREFIX>-X "[blocker] **src/auth.ts**: Missing input sanitization creates SQL injection risk."
+
+fp comment <PREFIX>-X "[suggestion] **src/utils.ts:23**: Could use optional chaining here for cleaner code."
+
+fp comment <PREFIX>-X "[nit] **README.md**: Typo in setup instructions."
+```
+
+- `[blocker]` - Must fix before merging
+- `[suggestion]` - Recommended improvement
+- `[nit]` - Minor/cosmetic issue
+
+### General Comments
+
+```bash
+fp comment <PREFIX>-X "Overall looks good. Main concern is the error handling in the API layer - see specific comments above."
+```
+
+---
+
+## Interactive Review UI
+
+For full interactive review with diff viewer, there are two main approaches:
+
+### Review Working Copy (No Commits Needed)
+
+If the user hasn't committed yet (or prefers not to commit while work is in progress):
+
+```bash
+fp review
+```
+
+This shows all uncommitted changes in the working directory. No commit assignment required.
+
+### Review by Issue
+
+```bash
+fp review <PREFIX>-X
+```
+
+**Note:** For issue-based review to work, the issue must have commits assigned. If no commits are assigned, either:
+1. Assign commits first with `fp issue assign`, OR
+2. Use `fp review` to review the working copy instead
+
+### Other Review Targets
+
+```bash
+fp review git:abc123           # Specific git commit
+fp review jj:abc123            # Specific jj revision
+fp review git:abc123..def456   # Range of commits
+```
+
+---
 
 ## Review Workflow
 
-### Step 1: Gather Context
-
-First, understand what was worked on:
+### Step 1: Check Assignments
 
 ```bash
-# See which issues are in-progress or recently done
-fp issue list --status in-progress
-fp issue list --status done
-
-# See the issue tree for context
-fp tree
-
-# Check recent commits (jj or git)
-jj log --limit 20   # or: git log --oneline -20
+fp issue files <PREFIX>-X
 ```
 
-### Step 2: Launch Subagent for Commit Analysis
-
-Use the Task tool to spawn a subagent that will analyze and assign commits:
-
-```
-Task: Analyze recent commits and assign them to the correct fp issues.
-
-Instructions for subagent:
-1. List recent commits with their changed files:
-   - jj log --limit 20 (or git log --oneline -20)
-   - For each commit, run jj show <id> (or git show <hash> --stat)
-
-2. Load issue context:
-   - fp issue list --status in-progress
-   - fp issue list --status done
-   - For each relevant issue: fp context <id>
-
-3. Match commits to issues by comparing:
-   - Files changed in commit vs files mentioned in issue description
-   - Commit message content vs issue title/description
-   - Whether the code changes implement the issue's requirements
-
-4. Assign commits to issues:
-   - fp issue assign <issue-id> --rev <commit-hash>
-   - Can assign multiple: fp issue assign <id> --rev hash1,hash2
-
-5. Report results:
-   - Which commits were assigned to which issues
-   - Any commits that don't clearly match (flag for user)
-   - Suggestions if commits should be split (one commit spans multiple issues)
-```
-
-### Step 3: Verify Assignments
-
-After the subagent completes, verify the assignments:
+### Step 2: Assign Missing Commits
 
 ```bash
-# Check each issue's tracked changes
-fp issue diff FP-X --stat
-fp issue files FP-X
-
-# Verify the tree shows proper tracking
-fp tree
+jj log --limit 20
+fp issue assign <PREFIX>-X --rev abc,def
 ```
 
-### Step 4: Handle Edge Cases
+### Step 3: View the Diff
 
-**Commit spans multiple issues:**
-- Assign to the primary issue
-- Consider suggesting the user split future commits
-- Note in issue comment if needed
-
-**Commit doesn't match any issue:**
-- Create a new issue for the work if it's substantial
-- Or assign to a catch-all/maintenance issue
-- Or leave unassigned if truly orphan work
-
-**Working copy has uncommitted changes:**
-Commit first, then assign. If the user wants to review changes visually before committing, suggest they run:
+```bash
+fp issue diff <PREFIX>-X --stat   # Overview
+fp issue diff <PREFIX>-X          # Full diff
+# Or use the web UI:
+fp review <PREFIX>-X
 ```
-fp review
-```
-This opens a web-based diff viewer. The user can run this command themselves to inspect changes and provide feedback.
 
-## Integration with Workflow
+### Step 4: Leave Comments
 
-This skill complements `fp-workflow`:
+```bash
+fp comment <PREFIX>-X "**file.ts:line**: feedback"
+```
 
-```
-fp-workflow                          fp-review
-    │                                    │
-    ├── Start Session                    │
-    ├── Claim Issue (in-progress)        │
-    ├── Code → Commit → Log              │
-    ├── Complete Issue (done)            │
-    │                                    │
-    └── End Session ──────────────────►  │
-                                         ├── Gather context
-                                         ├── Launch subagent
-                                         ├── Verify assignments
-                                         └── Handle edge cases
-```
+---
 
 ## Quick Reference
 
-### Commands Used
+### Commands
 
 ```bash
-# View issues
-fp issue list --status in-progress
-fp issue list --status done
-fp tree
+# Check assignments
+fp issue files <PREFIX>-X
 
-# View commits
-jj log --limit 20          # Jujutsu
-git log --oneline -20      # Git
+# Assign commits
+fp issue assign <PREFIX>-X --rev <commits>
 
-# View commit details
-jj show <commit-id>        # Jujutsu
-git show <hash> --stat     # Git
+# View changes
+fp issue diff <PREFIX>-X --stat
+fp issue diff <PREFIX>-X
 
-# Assign commits to issues
-fp issue assign FP-X --rev abc123
-fp issue assign FP-X --rev abc,def,ghi
+# Leave comments
+fp comment <PREFIX>-X "message"
 
-# Verify assignments
-fp issue diff FP-X --stat
-fp issue files FP-X
-
-# Review uncommitted changes (user runs this, opens web UI)
-# Suggest: fp review
+# Interactive review
+fp review <PREFIX>-X
 ```
 
-### Review Checklist
+### Comment Format
 
-- [ ] List in-progress and done issues
-- [ ] Review recent commits
-- [ ] Launch subagent to analyze and assign commits
-- [ ] Verify each issue has correct commits assigned
-- [ ] Handle any unmatched commits
-- [ ] Commit any uncommitted changes first (suggest user run `fp review` to inspect)
-
-## Anti-Patterns
-
-### ❌ Skipping review at end of session
-```bash
-# BAD: End session without ensuring commits are tracked
-fp comment FP-2 "Done for today"
-# Commits may not be assigned to issues!
-
-# GOOD: Run review before ending
-# Use fp-review skill to assign commits
-fp comment FP-2 "Done for today. All commits assigned."
+```
+**filepath**: general comment about file
+**filepath:line**: comment about specific line
+**filepath:start-end**: comment about line range
+[severity] **filepath**: prefixed comment
 ```
 
-### ❌ Assigning all commits to one issue
-```bash
-# BAD: Bulk assign without checking
-fp issue assign FP-1 --rev abc,def,ghi,jkl
-# Some commits might belong to different issues!
+### Severity Levels
 
-# GOOD: Analyze each commit and assign appropriately
-```
-
-### ❌ Ignoring unmatched commits
-```bash
-# BAD: Leave commits unassigned
-# Future agents won't know what work was done
-
-# GOOD: Either assign to relevant issue or create new issue
-fp issue create --title "Misc cleanup" 
-fp issue assign FP-99 --rev xyz
-```
+- `[blocker]` - Must fix
+- `[suggestion]` - Should consider
+- `[nit]` - Minor issue
