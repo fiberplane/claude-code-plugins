@@ -13,7 +13,7 @@ Before using fp commands, check setup:
 
 ```bash
 # Check if fp is installed
-which fp
+fp --version
 ```
 
 **If fp is not installed**, tell the user:
@@ -24,7 +24,7 @@ which fp
 
 ```bash
 # Check if project is initialized
-test -d .fp && echo "initialized" || echo "not initialized"
+fp tree
 ```
 
 **If project is not initialized**, ask the user if they want to initialize:
