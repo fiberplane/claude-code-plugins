@@ -237,7 +237,7 @@ Creates `<PREFIX>-6`, dependent on `<PREFIX>-4` and `<PREFIX>-5`.
 fp tree
 ```
 
-Expected output:
+Shows full hierarchy. Expected output:
 ```
 <PREFIX>-1 [todo] Add user authentication system
 ├── <PREFIX>-2 [todo] Design and implement data models
@@ -249,6 +249,16 @@ Expected output:
 │   └── blocked by: <PREFIX>-4
 └── <PREFIX>-6 [todo] Testing and documentation
     └── blocked by: <PREFIX>-4, <PREFIX>-5
+```
+
+To focus on just the plan you created:
+```bash
+fp tree <PREFIX>-1
+```
+
+To see only remaining work:
+```bash
+fp tree --status todo
 ```
 
 ### Step 4: Iterate and Refine

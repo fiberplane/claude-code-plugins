@@ -59,6 +59,18 @@ fp tree
 
 Shows all issues with hierarchy, status, and dependencies.
 
+```bash
+fp tree --status todo
+```
+
+Shows only todo items (filters out done work).
+
+```bash
+fp tree <PREFIX>-X
+```
+
+Shows a specific issue and its children - useful for focusing on one feature/epic.
+
 ### List by Status
 
 ```bash
@@ -232,8 +244,10 @@ fp issue files <PREFIX>-1          # All files changed by descendants
 
 ```bash
 # Find work
-fp tree
-fp issue list --status todo
+fp tree                              # Full hierarchy
+fp tree --status todo                # Only todo items
+fp tree <PREFIX>-X                   # Focus on one issue
+fp issue list --status todo          # List available tasks
 
 # Claim work
 fp issue update --status in-progress <PREFIX>-X
