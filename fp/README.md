@@ -54,7 +54,7 @@ fp review MYPROJ-a
 ### Skills
 
 - **fp-plan**: Create plans and break them down into trackable issues. Supports importing from GitHub, Linear, and Notion URLs.
-- **fp-execute**: Find, claim, and complete work on issues. Track progress with comments.
+- **fp-implement**: Find, claim, and complete work on issues. Track progress with comments.
 - **fp-review**: Ensure commits are assigned to issues, leave review comments, and use the web UI for interactive review.
 
 ## Data Storage
