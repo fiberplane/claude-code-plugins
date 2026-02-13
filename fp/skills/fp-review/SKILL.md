@@ -1,6 +1,6 @@
 ---
 name: fp-review
-description: Review code and ensure commits are assigned to issues. Use when user asks to "review code", "assign commits", "check commits are assigned", or "prepare for review".
+description: Review code, create stories, and ensure commits are assigned to issues. Use when user asks to "review code", "assign commits", "check commits are assigned", "prepare for review", "create a story", or "write a story".
 ---
 
 # FP Review Skill
@@ -41,7 +41,8 @@ fp init
 
 1. Verify commits are assigned to the correct issues
 2. Leave review comments on issues
-3. Point to the web UI for interactive review
+3. Open interactive review in the desktop app
+4. Create stories — narrative documents that walk through code changes
 
 ---
 
@@ -149,9 +150,11 @@ fp comment <PREFIX>-X "Overall looks good. Main concern is the error handling in
 
 ---
 
-## Interactive Review UI
+## Interactive Review (Desktop App)
 
-For full interactive review with diff viewer, there are two main approaches:
+`fp review` opens the Fiberplane desktop app for interactive diff review.
+
+**Requires the desktop app.** If not installed: https://setup.fp.dev/desktop/latest/
 
 ### Review Working Copy (No Commits Needed)
 
@@ -172,6 +175,14 @@ fp review <PREFIX>-X
 **Note:** For issue-based review to work, the issue must have commits assigned. If no commits are assigned, either:
 1. Assign commits first with `fp issue assign`, OR
 2. Use `fp review` to review the working copy instead
+
+### Review with Story
+
+```bash
+fp review <PREFIX>-X --with-story
+```
+
+Opens the review with the story panel visible alongside the diff. The issue must have a story created for it.
 
 ### Other Review Targets
 
@@ -203,8 +214,7 @@ fp issue assign <PREFIX>-X --rev abc,def
 ```bash
 fp issue diff <PREFIX>-X --stat   # Overview
 fp issue diff <PREFIX>-X          # Full diff
-# Or use the web UI:
-fp review <PREFIX>-X
+fp review <PREFIX>-X              # Open in desktop app
 ```
 
 ### Step 4: Leave Comments
@@ -212,6 +222,100 @@ fp review <PREFIX>-X
 ```bash
 fp comment <PREFIX>-X "**file.ts:line**: feedback"
 ```
+
+---
+
+## Stories
+
+Stories are narrative documents that walk a reviewer through code changes. They combine markdown prose with embedded diffs, file excerpts, and chat transcripts.
+
+**Requires the `experimental_story` feature flag:**
+```bash
+fp feature enable experimental_story
+```
+
+### Creating a Story
+
+```bash
+# From a file
+fp story create <PREFIX>-X --file story.md
+
+# From stdin
+cat story.md | fp story create <PREFIX>-X
+```
+
+The first `## ` heading in the markdown becomes the story title.
+
+### Story Format
+
+Stories are markdown documents that use directives to embed code artifacts:
+
+#### Diff Directive
+
+Shows file changes from the issue's assigned commits:
+
+```markdown
+## Moved validation to a shared module
+
+The old approach duplicated validation in each handler.
+
+:::diff{file="src/validation.ts"}
+Extracted from handler.ts and api.ts into a single module.
+:::
+```
+
+- `file` (required): relative path to the changed file
+- The text between `:::diff` and `:::` is the annotation — keep it to 1-2 sentences
+
+#### File Directive
+
+Shows file content (or a slice of it):
+
+```markdown
+:::file{path="src/config.ts" lines="10-25"}
+The new defaults that drive the behavior change.
+:::
+```
+
+- `path` (required): relative path to file
+- `lines` (optional): line range, e.g. `"10-25"`
+
+#### Chat Directive
+
+Embeds excerpts from an AI coding session:
+
+```markdown
+:::chat{source="claude" session="/path/to/session.jsonl" messages="msg1,msg2"}
+The key design discussion that led to this approach.
+:::
+```
+
+- `source`: `"claude"`, `"pi"`, or `"opencode"`
+- `session`: full path to session file
+- `messages`: comma-separated message IDs
+
+### Writing Guidelines
+
+- **Headings are past-tense verbs** — describe what was done, not what to do (e.g. "Moved validation to a shared module")
+- **Start with the user problem** — the opening prose should explain why the change exists
+- **Show diff, then explain** — lead with the `:::diff` directive, follow with the annotation
+- **Annotations are 1-2 sentences** — brief context, not a full explanation
+
+### UI Support
+
+Only `:::diff` is fully rendered in the desktop app right now. `:::file` works but the `collapsed` attribute is ignored. The `hunks` attribute on `:::diff` is also ignored.
+
+### Managing Stories
+
+```bash
+fp story list                    # List all stories in the project
+fp story get <story-id>          # Get story details (supports ID prefix)
+fp story get <PREFIX>-X          # Get story by issue ID
+fp story delete <story-id>       # Delete a story (supports ID prefix)
+fp story delete <story-id> --yes # Skip confirmation
+```
+
+One story per issue. Creating a new story for an issue replaces the previous one.
 
 ---
 
@@ -233,8 +337,15 @@ fp issue diff <PREFIX>-X
 # Leave comments
 fp comment <PREFIX>-X "message"
 
-# Interactive review
+# Interactive review (desktop app)
 fp review <PREFIX>-X
+
+# Stories
+fp story create <PREFIX>-X --file story.md
+fp story list
+fp story get <PREFIX>-X
+fp story delete <story-id>
+fp review <PREFIX>-X --with-story
 ```
 
 ### Comment Format
