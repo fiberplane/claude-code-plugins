@@ -1,0 +1,17 @@
+{
+  "description": "Track fp issue interactions for session-issue linking",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "fp hook detect",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}
